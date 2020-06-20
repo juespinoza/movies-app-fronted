@@ -1,2 +1,2 @@
-# movies-app-fronted
+# movies-app-frontend
 Aplicaciones Distribuidas
