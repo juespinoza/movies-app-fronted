@@ -2,16 +2,16 @@ import * as React from "react";
 import {
   StyleSheet,
   SafeAreaView,
-  Text,
   Button,
   FlatList,
   TouchableHighlight,
   View,
   Image,
 } from "react-native";
+import { theme, withGalio, Text, Card } from "galio-framework";
 import { getEstrenos } from "../controllers/TmdbController";
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: "Estrenos",
   });
@@ -41,11 +41,16 @@ export default class HomeScreen extends React.Component {
     //console.log("movie?", item);
     return (
       <TouchableHighlight onPress={() => this.onMovieClick(item)}>
-        <View>
-          <Image style={styles.photo} source={{ uri: item.imagen }} />
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.category}>{item.release}</Text>
-        </View>
+        <Card
+          flex
+          borderless
+          style={styles.card}
+          title={item.title}
+          caption={item.release}
+          imageStyle={styles.cardImageRadius}
+          imageBlockStyle={{ padding: theme.SIZES.BASE / 2 }}
+          image={item.imagen}
+        />
       </TouchableHighlight>
     );
   };
@@ -53,29 +58,26 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.text}>Some filters</Text>
+        <Text style={styles.text}>Some filterss</Text>
         <FlatList
           data={this.state.estrenos}
           renderItem={this.renderMovieItem}
-          keyExtractor={(movie) => movie.id}
-        />
-        <Button
-          title="Ir a detalles"
-          onPress={() => navigation.navigate("Details")}
+          keyExtractor={(movie) => `${movie.id}`}
         />
       </SafeAreaView>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#333",
-    alignItems: "center",
-    //justifyContent: "center",
-  },
-  text: {
-    color: "#bbb",
-  },
-});
+const styles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.COLORS.FACEBOOK,
+    },
+    text: {
+      color: "#bbb",
+    },
+  });
+
+export default withGalio(HomeScreen, styles);
