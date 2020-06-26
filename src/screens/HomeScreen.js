@@ -2,11 +2,8 @@ import * as React from "react";
 import {
   StyleSheet,
   SafeAreaView,
-  Button,
   FlatList,
   TouchableHighlight,
-  View,
-  Image,
 } from "react-native";
 import { theme, withGalio, Text, Card } from "galio-framework";
 import { getEstrenos } from "../controllers/TmdbController";
