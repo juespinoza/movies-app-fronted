@@ -1,11 +1,13 @@
 const createData = (item, idArray) => {
   const baseURLImg = "https://image.tmdb.org/t/p/w200";
+  //console.log("createData", item);
 
   return {
     id: item.id,
     imagen: `${baseURLImg}${item.poster_path}`,
     title: item.title,
     release: item.release_date,
+    popularity: item.popularity,
   };
 };
 
@@ -13,7 +15,7 @@ export const getEstrenos = async function () {
   //Parametros de conexion
   const url = "https://api.themoviedb.org/3/discover/movie?api_key=";
   const discover =
-    "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+    "&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=1";
   const apiKEY = "4ce33649c94cdd5b67c6d02735f6a41a";
 
   const endpoint = `${url}${apiKEY}${discover}`;
