@@ -11,7 +11,7 @@ function AppContainer() {
     <NavigationContainer>
       <Drawer.Navigator
         drawerContentOptions={{
-          activeTintColor: "#000",
+          activeTintColor: "#4f4d37",
           itemStyle: { marginVertical: 5 },
         }}
       >

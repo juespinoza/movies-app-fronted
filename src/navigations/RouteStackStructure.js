@@ -20,9 +20,9 @@ export const homeScreen = ({ navigation }) => {
             <MenuDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: "#5360ed", //Set Header color
+            backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#000", //Set Header text color
+          headerTintColor: "#333", //Set Header text color
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
@@ -52,9 +52,9 @@ export const registerScreen = ({ navigation }) => {
             <MenuDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: "#5360ed", //Set Header color
+            backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#000", //Set Header text color
+          headerTintColor: "#333", //Set Header text color
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
@@ -76,9 +76,9 @@ export const loginScreen = ({ navigation }) => {
             <MenuDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: "#5360ed", //Set Header color
+            backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#000", //Set Header text color
+          headerTintColor: "#333", //Set Header text color
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
