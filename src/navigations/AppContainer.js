@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { homeScreen, registerScreen } from "./RouteStackStructure";
+import { homeScreen, registerScreen, loginScreen } from "./RouteStackStructure";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,6 +19,11 @@ function AppContainer() {
           name="HomeScreen"
           options={{ drawerLabel: "Home" }}
           component={homeScreen}
+        />
+        <Drawer.Screen
+          name="LoginScreen"
+          options={{ drawerLabel: "Login" }}
+          component={loginScreen}
         />
         <Drawer.Screen
           name="RegisterScreen"

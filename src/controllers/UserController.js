@@ -1,6 +1,6 @@
 export const registration = async (data) => {
-  //const endpoint = "http://192.168.1.2:47000/user/registration";
-  const endpoint = "http://s1.ebrainte.com:47000/user/registration";
+  const endpoint = "http://192.168.1.2:47000/user/registration";
+  // const endpoint = "http://s1.ebrainte.com:47000/user/registration";
   const options = {
     method: "POST",
     body: JSON.stringify(data),

@@ -60,7 +60,7 @@ class RegisterScreen extends React.Component {
           enabled
         >
           <Block flex={2} center space="between">
-            <Block flex={1}>
+            <Block flex={1} style={{ marginTop: 20 }}>
               <Image source={require("../../assets/movieIcon.png")} />
             </Block>
             <Block flex={2}>
@@ -121,12 +121,6 @@ const styles = StyleSheet.create({
     paddingTop: theme.SIZES.BASE * 0.3,
     paddingHorizontal: theme.SIZES.BASE,
     backgroundColor: theme.COLORS.WHITE,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: "center",
   },
 });
 
