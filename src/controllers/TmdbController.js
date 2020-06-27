@@ -5,9 +5,11 @@ const createData = (item, idArray) => {
   return {
     id: item.id,
     imagen: `${baseURLImg}${item.poster_path}`,
+    imageUrl: `${baseURLImg}${item.poster_path}`,
     title: item.title,
     release: item.release_date,
     popularity: item.popularity,
+    lang: item.original_language
   };
 };
 
@@ -55,6 +57,8 @@ export const findByTitle = async function (movieName) {
 
 
 export const findByFilter = async function (sortby,order) {
+  console.log(sortby);
+  console.log(order);
   const url ="https://api.themoviedb.org/3/discover/movie?api_key=";
   const apiKEY="af158ebf42ce4f8e554bcd0ba82df8dc";
   // &language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1

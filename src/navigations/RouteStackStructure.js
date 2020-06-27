@@ -32,7 +32,7 @@ export const homeScreen = ({ navigation }) => {
         name="Details"
         component={DetailsScreen}
         options={{
-          title: "Movie Details", //Set Header Title
+          title: "Detalle de la Pelicula", //Set Header Title
           headerStyle: {
             backgroundColor: "#cfcba7", //Set Header color
           },
