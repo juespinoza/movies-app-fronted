@@ -119,7 +119,7 @@ class LoginScreen extends React.Component {
                   lineHeight: theme.SIZES.FONT * 2,
                 }}
               >
-                Forgot your password?
+                ¿Olvidaste tu contraseña?
               </Text>
             </Block>
             <Block flex middle>
