@@ -20,17 +20,17 @@ function AppContainer() {
       >
         <Drawer.Screen
           name="HomeScreen"
-          options={{ drawerLabel: "Home" }}
+          options={{ drawerLabel: "Buscar Pelis" }}
           component={homeScreen}
         />
         <Drawer.Screen
           name="LoginScreen"
-          options={{ drawerLabel: "Login" }}
+          options={{ drawerLabel: "Iniciar Sesion" }}
           component={loginScreen}
         />
         <Drawer.Screen
           name="RegisterScreen"
-          options={{ drawerLabel: "Sign up" }}
+          options={{ drawerLabel: "Registrarse" }}
           component={registerScreen}
         />
       </Drawer.Navigator>

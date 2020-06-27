@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import { theme, withGalio, Text, Card } from "galio-framework";
-import { getEstrenos } from "../controllers/TmdbController";
+import { getEstrenos, findByTitle, findByFilter } from "../controllers/TmdbController";
 
 class HomeScreen extends React.Component {
   // To avoid warning of setting state when component is not mounted

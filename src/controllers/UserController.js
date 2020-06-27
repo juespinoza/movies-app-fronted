@@ -1,6 +1,6 @@
 export const registration = async (data) => {
-  const endpoint = "http://192.168.1.2:47000/user/registration";
-  // const endpoint = "http://s1.ebrainte.com:47000/user/registration";
+  //const endpoint = "http://192.168.1.2:47000/user/registration";
+  const endpoint = "http://s1.ebrainte.com:47000/user/registration";
   const options = {
     method: "POST",
     body: JSON.stringify(data),
@@ -29,8 +29,8 @@ export const registration = async (data) => {
 };
 
 export const login = async (data) => {
-  const endpoint = "http://192.168.1.2:47000/user/login";
-  // const endpoint = "http://s1.ebrainte.com:47000/user/login";
+  // const endpoint = "http://192.168.1.2:47000/user/login";
+  const endpoint = "http://s1.ebrainte.com:47000/user/login";
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -40,7 +40,7 @@ export const login = async (data) => {
     let response = await fetch(endpoint, options);
     let responseStatus = response.status;
     let responseData = await response.json();
-
+    console.log(responseData);
     switch (responseStatus) {
       case 200: {
         return { rdo: 0, mensaje: "OK", data: responseData.userData };

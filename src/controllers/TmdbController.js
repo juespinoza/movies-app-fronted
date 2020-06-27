@@ -16,7 +16,7 @@ export const getEstrenos = async function () {
   const url = "https://api.themoviedb.org/3/discover/movie?api_key=";
   const discover =
     "&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=1";
-  const apiKEY = "4ce33649c94cdd5b67c6d02735f6a41a";
+  const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
 
   const endpoint = `${url}${apiKEY}${discover}`;
   let result = await fetch(endpoint);
@@ -37,7 +37,28 @@ export const findByTitle = async function (movieName) {
   //Parametros de conexion
   const url = "https://api.themoviedb.org/3/search/movie?api_key=";
   const search = `${"&query="}${movieName}${"&page=1"}`;
-  const apiKEY = "4ce33649c94cdd5b67c6d02735f6a41a";
+  const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
+
+  const endpoint = `${url}${apiKEY}${search}`;
+  let result = await fetch(endpoint);
+  let apiResponse = await result.json();
+  const movies = apiResponse.results;
+
+  let foundMovies = [];
+  let i;
+  for (i = 0; i < movies.length; i++) {
+    foundMovies.push(createData(movies[i], i));
+  }
+  //console.log("estrenos a mostrar", estrenosAMostrar);
+  return foundMovies;
+};
+
+
+export const findByFilter = async function (sortby,order) {
+  const url ="https://api.themoviedb.org/3/discover/movie?api_key=";
+  const apiKEY="af158ebf42ce4f8e554bcd0ba82df8dc";
+  // &language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
+  const search= `${"&language=en-US&sort_by="}${sortby}.${order}${"&include_adult=false&include_video=false&page=1"}`;
 
   const endpoint = `${url}${apiKEY}${search}`;
   let result = await fetch(endpoint);
