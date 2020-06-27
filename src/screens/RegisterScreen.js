@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { theme, Block, Button, Input, Text, NavBar } from "galio-framework";
+import { registration } from "../controllers/UserController";
 
 const { height, width } = Dimensions.get("window");
 
@@ -18,6 +19,7 @@ class RegisterScreen extends React.Component {
       user: "",
       email: "",
       password: "",
+      genreIds: [],
     };
   }
 
@@ -25,11 +27,25 @@ class RegisterScreen extends React.Component {
     this.setState({ [name]: value });
   };
 
-  onSignUpClick = () => {
-    Alert(
-      "Usuario creado correctamente",
-      "Ahora puede acceder a la votacion y comentario de películas."
-    );
+  handleRegistration = () => {
+    const data = {
+      fullName: this.state.user,
+      email: this.state.email,
+      password: this.state.password,
+      genreIds: this.state.genreIds,
+    };
+    this.setRegistration(data);
+  };
+
+  setRegistration = async (userData) => {
+    let response = await registration(userData);
+    if (response != undefined && response.rdo == 0) {
+      this.props.navigation.navigate("Login", {
+        flashMessage: response.message,
+      });
+    } else {
+      return Alert("Usuario no registrado!", `${response.message}`);
+    }
   };
 
   render() {
@@ -38,13 +54,6 @@ class RegisterScreen extends React.Component {
 
     return (
       <Block safe flex style={{ backgroundColor: theme.COLORS.WHITE }}>
-        <NavBar
-          title=""
-          onLeftPress={() => navigation.openDrawer()}
-          style={
-            Platform.OS === "android" ? { marginTop: theme.SIZES.BASE } : null
-          }
-        />
         <KeyboardAvoidingView
           style={styles.container}
           behavior="height"
@@ -77,7 +86,10 @@ class RegisterScreen extends React.Component {
               />
             </Block>
             <Block flex middle>
-              <Button color="error" onPress={() => this.onSignUpClick()}>
+              <Button
+                color="error"
+                onPress={this.handleRegistration.bind(this)}
+              >
                 Sign up
               </Button>
               <Button

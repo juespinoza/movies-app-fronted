@@ -9,6 +9,9 @@ import { theme, withGalio, Text, Card } from "galio-framework";
 import { getEstrenos } from "../controllers/TmdbController";
 
 class HomeScreen extends React.Component {
+  // To avoid warning of setting state when component is not mounted
+  // TODO: replace with a potable solution (this is a code smell)
+  _isMounted = false;
   static navigationOptions = ({ navigation }) => ({
     title: "Estrenos",
   });
@@ -22,12 +25,19 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.onGetEstrenos();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onGetEstrenos = async () => {
     let newMovies = await getEstrenos();
-    this.setState({ estrenos: newMovies, isLoading: false });
+    if (this._isMounted) {
+      this.setState({ estrenos: newMovies, isLoading: false });
+    }
   };
 
   onMovieClick = (movie) => {
@@ -35,7 +45,6 @@ class HomeScreen extends React.Component {
   };
 
   renderMovieItem = ({ item }) => {
-    //console.log("movie?", item);
     return (
       <TouchableHighlight onPress={() => this.onMovieClick(item)}>
         <Card
