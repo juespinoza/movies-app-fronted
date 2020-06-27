@@ -4,6 +4,7 @@ import MenuDrawerStructure from "./MenuDrawerStructure";
 import HomeScreen from "../screens/HomeScreen";
 import DetailsScreen from "../screens/DetailsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 
@@ -61,3 +62,35 @@ export const registerScreen = ({ navigation }) => {
     </Stack.Navigator>
   );
 };
+
+export const profileScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Perfil", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#5360ed", //Set Header color
+          },
+          headerTintColor: "#000", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{
+          title: "Movie Details", //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
