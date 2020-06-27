@@ -34,12 +34,14 @@ class RegisterScreen extends React.Component {
       password: this.state.password,
       genreIds: this.state.genreIds,
     };
+    // TODO: validate user data
     this.setRegistration(data);
   };
 
   setRegistration = async (userData) => {
     let response = await registration(userData);
-    if (response != undefined && response.rdo == 0) {
+    if (response.rdo == 0) {
+      // TODO: manage flashMessage in home
       this.props.navigation.navigate("Login", {
         flashMessage: response.message,
       });
@@ -60,10 +62,18 @@ class RegisterScreen extends React.Component {
           enabled
         >
           <Block flex={2} center space="between">
-            <Block flex={1} style={{ marginTop: 20 }}>
+            <Block flex center style={{ marginTop: 20 }}>
               <Image source={require("../../assets/movieIcon.png")} />
             </Block>
-            <Block flex={2}>
+            <Block flex={4}>
+              <Text
+                muted
+                center
+                style={{ marginTop: 0, marginBottom: 20, width: width * 0.9 }}
+              >
+                Regístrate con tus datos para crear tus listas de películas y
+                votar a tus favoritas
+              </Text>
               <Input
                 placeholder="Nombre"
                 autoCapitalize="none"
@@ -84,6 +94,7 @@ class RegisterScreen extends React.Component {
                 style={{ width: width * 0.9 }}
                 onChangeText={(text) => this.handleChange("password", text)}
               />
+              {/* TODO: implement genre list */}
             </Block>
             <Block flex middle>
               <Button

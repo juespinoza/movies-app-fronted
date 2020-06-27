@@ -1,85 +1,66 @@
 import React from "react";
+import AsyncStorage from "@react-native-community/async-storage";
 import {
   Alert,
   Dimensions,
   KeyboardAvoidingView,
   StyleSheet,
-  Platform,
   Image,
 } from "react-native";
+import { theme, Block, Button, Input, Text } from "galio-framework";
+import { login } from "../controllers/UserController";
 
-// galio component
-import { theme, Block, Button, Input, NavBar, Text } from "galio-framework";
-
-const { height, width } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 class LoginScreen extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    token: "",
-    loginSuccess: false,
-    loggedUser: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      loggedUser: null,
+    };
+  }
 
   handleChange = (name, value) => {
     this.setState({ [name]: value });
-    console.log(this.state[name]);
   };
 
   handleLogin = () => {
-    console.log("this is the login handle;");
+    const data = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    // TODO: validate email and password
+    this.setLogin(data);
   };
 
-  // componentDidMount() {
-  //   // this.getRequestToken();
-  // }
+  setLogin = async (loginData) => {
+    let response = await login(loginData);
 
-  // getRequestToken() {
-  //   const url = "http://s1.ebrainte.com/47000/user/login";
+    if (response.rdo == 0) {
+      this.setState({ loggedUser: response.data });
+      this.storeData(response.data);
+      // TODO: manage flashMessage in home
+      this.props.navigation.navigate("Home", {
+        flashMessage: response.message,
+      });
+    } else {
+      return Alert("¡Error!", `${response.message}`);
+    }
+  };
 
-  //   fetch(url)
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((responseData) => {
-  //       this.setState({
-  //         requestToken: responseData.request_token,
-  //       });
-  //       console.log(responseData.requestToken);
-  //     });
-  // }
-
-  // getLoginData() {
-  //   const data = {
-  //     email: this.state.username,
-  //     password: this.state.password,
-  //   };
-  //   console.log(data);
-  //   let url = "http://s1.ebrainte.com:47000/user/login";
-
-  //   fetch(url, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       this.setState({ loginSuccess: true });
-  //       this.setState({ userData: data });
-  //       RootNavigation.navigate("Buscar", {
-  //         userData: data,
-  //         loginSuccess: true,
-  //       });
-  //       console.log(data);
-  //     });
-  // }
+  storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@user", jsonValue);
+    } catch (e) {
+      console.log("Error storing logged userData. Error message:", e);
+    }
+  };
 
   render() {
     const { navigation } = this.props;
-    const { email, password } = this.state;
 
     return (
       <Block safe flex style={{ backgroundColor: theme.COLORS.WHITE }}>
@@ -88,25 +69,25 @@ class LoginScreen extends React.Component {
           behavior="height"
           enabled
         >
-          <Block flex={2} center space="between">
+          <Block flex={2} center space="evenly">
             <Block flex center style={{ marginTop: 50 }}>
               <Image source={require("../../assets/movieIcon.png")} />
             </Block>
             <Block flex={2}>
               <Text muted center style={{ marginTop: 0, marginBottom: 20 }}>
-                Ingresa con tu usuario y contrasena
+                Ingresa con tu e-mail y contraseña
               </Text>
               <Input
                 type="email-address"
-                placeholder="Nombre de Usuario"
+                placeholder="Email"
                 autoCapitalize="none"
                 style={{ width: width * 0.9 }}
-                onChangeText={(text) => this.handleChange("username", text)}
+                onChangeText={(text) => this.handleChange("email", text)}
               />
               <Input
                 password
                 viewPass
-                placeholder="Contrasena"
+                placeholder="Contraseña"
                 style={{ width: width * 0.9 }}
                 onChangeText={(text) => this.handleChange("password", text)}
               />
