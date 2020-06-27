@@ -1,25 +1,24 @@
 import React from "react";
+import AsyncStorage from "@react-native-community/async-storage";
 import {
   Alert,
   Dimensions,
-  StyleSheet,
   KeyboardAvoidingView,
-  Platform,
+  StyleSheet,
   Image,
 } from "react-native";
-import { theme, Block, Button, Input, Text, NavBar } from "galio-framework";
-import { registration } from "../controllers/UserController";
+import { theme, Block, Button, Input, Text } from "galio-framework";
+import { login } from "../controllers/UserController";
 
-const { height, width } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
-class RegisterScreen extends React.Component {
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "",
       email: "",
       password: "",
-      genreIds: [],
+      loggedUser: null,
     };
   }
 
@@ -27,32 +26,41 @@ class RegisterScreen extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleRegistration = () => {
+  handleLogin = () => {
     const data = {
-      fullName: this.state.user,
       email: this.state.email,
       password: this.state.password,
-      genreIds: this.state.genreIds,
     };
-    // TODO: validate user data
-    this.setRegistration(data);
+    // TODO: validate email and password
+    this.setLogin(data);
   };
 
-  setRegistration = async (userData) => {
-    let response = await registration(userData);
+  setLogin = async (loginData) => {
+    let response = await login(loginData);
+
     if (response.rdo == 0) {
+      this.setState({ loggedUser: response.data });
+      this.storeData(response.data);
       // TODO: manage flashMessage in home
-      this.props.navigation.navigate("Login", {
+      this.props.navigation.navigate("Home", {
         flashMessage: response.message,
       });
     } else {
-      return Alert("Usuario no registrado!", `${response.message}`);
+      return Alert("¡Error!", `${response.message}`);
+    }
+  };
+
+  storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@user", jsonValue);
+    } catch (e) {
+      console.log("Error storing logged userData. Error message:", e);
     }
   };
 
   render() {
     const { navigation } = this.props;
-    const { user, email, password } = this.state;
 
     return (
       <Block safe flex style={{ backgroundColor: theme.COLORS.WHITE }}>
@@ -61,25 +69,14 @@ class RegisterScreen extends React.Component {
           behavior="height"
           enabled
         >
-          <Block flex={2} center space="between">
-            <Block flex center style={{ marginTop: 20 }}>
+          <Block flex={2} center space="evenly">
+            <Block flex center style={{ marginTop: 50 }}>
               <Image source={require("../../assets/movieIcon.png")} />
             </Block>
-            <Block flex={4}>
-              <Text
-                muted
-                center
-                style={{ marginTop: 0, marginBottom: 20, width: width * 0.9 }}
-              >
-                Regístrate con tus datos para crear tus listas de películas y
-                votar a tus favoritas
+            <Block flex={2}>
+              <Text muted center style={{ marginTop: 0, marginBottom: 20 }}>
+                Ingresa con tu e-mail y contraseña
               </Text>
-              <Input
-                placeholder="Nombre"
-                autoCapitalize="none"
-                style={{ width: width * 0.9 }}
-                onChangeText={(text) => this.handleChange("user", text)}
-              />
               <Input
                 type="email-address"
                 placeholder="Email"
@@ -90,30 +87,37 @@ class RegisterScreen extends React.Component {
               <Input
                 password
                 viewPass
-                placeholder="Password"
+                placeholder="Contraseña"
                 style={{ width: width * 0.9 }}
                 onChangeText={(text) => this.handleChange("password", text)}
               />
-              {/* TODO: implement genre list */}
+              <Text
+                color={theme.COLORS.ERROR}
+                size={theme.SIZES.FONT * 0.75}
+                onPress={() => Alert.alert("Not implemented")}
+                style={{
+                  alignSelf: "flex-end",
+                  lineHeight: theme.SIZES.FONT * 2,
+                }}
+              >
+                ¿Olvidaste tu contraseña?
+              </Text>
             </Block>
             <Block flex middle>
-              <Button
-                color="error"
-                onPress={this.handleRegistration.bind(this)}
-              >
-                Sign up
+              <Button color="error" onPress={this.handleLogin.bind(this)}>
+                Sign in
               </Button>
               <Button
                 color="transparent"
                 shadowless
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => navigation.navigate("Register")}
               >
                 <Text
                   center
                   color={theme.COLORS.ERROR}
                   size={theme.SIZES.FONT * 0.75}
                 >
-                  ¿Ya tienes una cuenta? Sign In
+                  ¿No tienes una cuenta? Regístrate.
                 </Text>
               </Button>
             </Block>
@@ -135,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterScreen;
+export default LoginScreen;

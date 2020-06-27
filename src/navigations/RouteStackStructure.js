@@ -4,6 +4,7 @@ import MenuDrawerStructure from "./MenuDrawerStructure";
 import HomeScreen from "../screens/HomeScreen";
 import DetailsScreen from "../screens/DetailsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createStackNavigator();
 
@@ -19,9 +20,9 @@ export const homeScreen = ({ navigation }) => {
             <MenuDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: "#5360ed", //Set Header color
+            backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#000", //Set Header text color
+          headerTintColor: "#333", //Set Header text color
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
@@ -32,6 +33,7 @@ export const homeScreen = ({ navigation }) => {
         component={DetailsScreen}
         options={{
           title: "Movie Details", //Set Header Title
+          headerLeft: () => navigation.navigate("Home"),
         }}
       />
     </Stack.Navigator>
@@ -50,9 +52,33 @@ export const registerScreen = ({ navigation }) => {
             <MenuDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: "#5360ed", //Set Header color
+            backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#000", //Set Header text color
+          headerTintColor: "#333", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const loginScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          title: "Login", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
