@@ -33,7 +33,10 @@ export const homeScreen = ({ navigation }) => {
         component={DetailsScreen}
         options={{
           title: "Movie Details", //Set Header Title
-          headerLeft: () => navigation.navigate("Home"),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
         }}
       />
     </Stack.Navigator>
