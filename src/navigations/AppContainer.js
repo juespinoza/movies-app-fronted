@@ -3,7 +3,12 @@ import * as React from "react";
 import { Dimensions } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { homeScreen, registerScreen, loginScreen } from "./RouteStackStructure";
+import {
+  homeScreen,
+  registerScreen,
+  loginScreen,
+  movieListsScreen,
+} from "./RouteStackStructure";
 
 const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get("screen");
@@ -22,6 +27,11 @@ function AppContainer() {
           name="HomeScreen"
           options={{ drawerLabel: "Buscar Pelis" }}
           component={homeScreen}
+        />
+        <Drawer.Screen
+          name="Movie Lists"
+          options={{ drawerLabel: "Listas de películas" }}
+          component={movieListsScreen}
         />
         <Drawer.Screen
           name="LoginScreen"

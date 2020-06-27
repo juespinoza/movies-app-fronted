@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import DetailsScreen from "../screens/DetailsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import LoginScreen from "../screens/LoginScreen";
+import MovieListsScreen from "../screens/MovieListsScreen";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,27 @@ export const loginScreen = ({ navigation }) => {
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const movieListsScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Movie Lists"
+        component={MovieListsScreen}
+        options={{
+          title: "Listas de películas", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
         }}
       />
     </Stack.Navigator>
