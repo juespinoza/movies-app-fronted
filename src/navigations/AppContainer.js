@@ -4,7 +4,13 @@ import {useState, useEffect} from "react";
 import { Dimensions, SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { homeScreen, registerScreen, loginScreen, logoutScreen } from "./RouteStackStructure";
+import {
+  homeScreen,
+  registerScreen,
+  loginScreen,
+  logoutScreen,
+  movieListsScreen,
+} from "./RouteStackStructure";
 import { Text, Block } from "galio-framework";
 import AsyncStorage from "@react-native-community/async-storage";
 
