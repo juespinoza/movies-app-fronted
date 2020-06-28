@@ -6,16 +6,45 @@ export const getAllLists = async () => {
     method: "GET",
   };
   try {
-    let response = await fetch(endpoint, { method: "GET" });
+    let response = await fetch(endpoint, options);
     let responseStatus = response.status;
     let responseData = await response.json();
-    let lists = responseData.map((item) => ({
-      id: item["_id"],
-      name: item["name"],
-      public: item["public"],
-      owner: item["owner"],
-    }));
 
+    switch (responseStatus) {
+      case 200: {
+        return {
+          rdo: 0,
+          mensaje: "OK",
+          data: responseData,
+        };
+      }
+      default: {
+        return { rdo: 1, mensaje: "Ha ocurrido un error" };
+      }
+    }
+  } catch (error) {
+    console.error("Error on POST /api/getPublicMovieLists", error);
+    return { rdo: 1, mensaje: error };
+  }
+};
+
+export const getMyLists = async (ownerData) => {
+  const endpoint = `${URL}/api/getMyMovieLists`;
+  const options = {
+    method: "POST",
+    body: JSON.stringify(ownerData),
+    headers: { "Content-Type": "application/json" },
+  };
+  try {
+    console.log("_________________________API______________________________");
+    let response = await fetch(endpoint, options);
+    console.log("response:", response);
+    let responseStatus = response.status;
+    console.log("status:", responseStatus);
+    let responseData = await response.json();
+    console.log("responseData json:", responseData);
+
+    console.log("_________________________API______________________________");
     switch (responseStatus) {
       case 200: {
         return {

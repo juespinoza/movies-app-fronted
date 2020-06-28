@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, Block, Card, Icon, Button } from "galio-framework";
-import { getAllLists } from "../controllers/MovieListController";
+import { getMyLists } from "../controllers/MovieListController";
 import theme from "../theme";
 
 const { height, width } = Dimensions.get("window");
 
-export default class PublicListsScreen extends React.Component {
+export default class MyListsScreen extends React.PureComponent {
   _isMounted = false;
   constructor(props) {
     super(props);
@@ -51,7 +51,15 @@ export default class PublicListsScreen extends React.Component {
   // };
 
   getMovies = async () => {
-    let response = await getAllLists();
+    console.log("no me vino?", this.state.currentUser);
+    const {
+      currentUser: { email },
+    } = this.state;
+    console.log("owner?:", email);
+    const ownerData = { email };
+    console.log("ownerData?:", ownerData);
+    let response = await getMyLists();
+    console.log("responseData?:", response);
     if (this._isMounted && response.rdo == 0) {
       this.setState({ movieLists: response.data, isLoading: false });
     } else {
@@ -120,11 +128,11 @@ export default class PublicListsScreen extends React.Component {
         {currentUser !== null && (
           <Block flex={3}>
             <Block center style={{ paddingTop: 20 }}>
-              <Text muted>Todas las listas públicas</Text>
+              <Text muted>Mis listas de películas</Text>
             </Block>
             {isLoading && (
               <Text flex center>
-                Cargando listas de películas públicas...
+                Cargando mis listas...
               </Text>
             )}
             {!isLoading && (
@@ -137,8 +145,8 @@ export default class PublicListsScreen extends React.Component {
                   />
                 )}
                 {movieLists.length === 0 && (
-                  <Text flex center>
-                    No hay listas públicas.
+                  <Text flex center style={{ marginTop: 20 }}>
+                    No tienes listas creadas.
                   </Text>
                 )}
               </Block>

@@ -9,6 +9,15 @@ import MovieListsScreen from "../screens/MovieListsScreen";
 
 const Stack = createStackNavigator();
 
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem("@user");
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    console.error("Error getting logged user data with AsyncStorage");
+  }
+};
+
 export const homeScreen = ({ navigation }) => {
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
