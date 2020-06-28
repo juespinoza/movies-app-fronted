@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import DetailsScreen from "../screens/DetailsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import LoginScreen from "../screens/LoginScreen";
+import LogoutScreen from "../screens/LogoutScreen";
 
 const Stack = createStackNavigator();
 
@@ -74,7 +75,31 @@ export const loginScreen = ({ navigation }) => {
         name="Login"
         component={LoginScreen}
         options={{
-          title: "Login", //Set Header Title
+          title: "Iniciar sesion", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const logoutScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Logout"
+        component={LogoutScreen}
+        options={{
+          title: "Cerrar sesion", //Set Header Title
           headerLeft: () => (
             <MenuDrawerStructure navigationProps={navigation} />
           ),
