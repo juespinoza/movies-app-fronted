@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { Text, Block, Card, Icon } from "galio-framework";
+import { Text, Block, Card, Icon, Button } from "galio-framework";
 import { getAllLists } from "../controllers/MovieListController";
 import theme from "../theme";
 
@@ -114,16 +114,20 @@ export default class MovieLists extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
     const { movieLists, isLoading, currentUser } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         {currentUser !== null && (
           <Block flex={3}>
-            {/* TODO: add buttons for navigation to mis listas, públicas, siguiendo */}
             <Block center style={{ paddingTop: 20 }}>
               <Text muted>Todas las listas públicas</Text>
             </Block>
-            {isLoading && <Text>Cargando películas...</Text>}
+            {isLoading && (
+              <Text flex center>
+                Cargando películas...
+              </Text>
+            )}
             {!isLoading && (
               <Block>
                 {movieLists.length > 0 && (
@@ -134,16 +138,20 @@ export default class MovieLists extends React.Component {
                   />
                 )}
                 {movieLists.length === 0 && (
-                  <Text>No hay películas públicas.</Text>
+                  <Text flex center>
+                    No hay películas públicas.
+                  </Text>
                 )}
               </Block>
             )}
           </Block>
         )}
         {currentUser === null && (
-          <Text flex center muted>
-            Tienes que estar logueado!
-          </Text>
+          <Button flex center onPress={() => navigation.navigate("Login")}>
+            <Text flex center muted>
+              Tienes que estar logueado!
+            </Text>
+          </Button>
         )}
       </SafeAreaView>
     );
