@@ -30,6 +30,7 @@ class HomeScreen extends React.Component {
       estrenos: [],
       movieName: "",
       sortOrder: true,
+      sortValue: "asc",
       isModalVisible: false,
       sortby: 'popularity'
     };
@@ -63,7 +64,7 @@ class HomeScreen extends React.Component {
   onFilterButton = async () => {
     this.setState({isLoading: true});
     this.toggleModal();
-    let result = await findByFilter(this.state.sortby,this.state.sortOrder);
+    let result = await findByFilter(this.state.sortby,this.state.sortValue);
     this.setState({ estrenos: result, isLoading: false });
   }
 
@@ -78,6 +79,15 @@ class HomeScreen extends React.Component {
 
   toggleSwitch = (value) => {
     this.setState({sortOrder: value})
+    if (value) {
+      this.setState({sortValue: "asc"})
+      console.log(this.state.sortValue);
+    }
+    else
+    {
+      this.setState({sortValue: "desc"})
+      console.log(this.state.sortValue);
+    }
     console.log(value);
   }
 
@@ -112,6 +122,32 @@ class HomeScreen extends React.Component {
           imageStyle={styles.cardImageRadius}
           imageBlockStyle={{ padding: theme.SIZES.BASE / 2 }}
           image={item.imagen}
+          location={(
+            <Block row right>
+              <Block row middle style={{ marginHorizontal: theme.SIZES.BASE }}>
+                <Icon name="bar-chart" type="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 0.875} />
+                <Text
+                  p
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                  style={{ marginLeft: theme.SIZES.BASE * 0.25 }}
+                >
+                  {item.avg}
+                </Text>
+              </Block>
+              <Block row middle>
+                <Icon name="hashtag" type="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 0.875} />
+                <Text
+                  p
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                  style={{ marginLeft: theme.SIZES.BASE * 0.25 }}
+                >
+                  {item.count}
+                </Text>
+              </Block>
+            </Block>
+          )}
         />
       </TouchableHighlight>
     );

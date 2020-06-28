@@ -9,7 +9,9 @@ const createData = (item, idArray) => {
     title: item.title,
     release: item.release_date,
     popularity: item.popularity,
-    lang: item.original_language
+    lang: item.original_language,
+    avg: item.vote_average,
+    count: item.vote_count
   };
 };
 
@@ -57,8 +59,8 @@ export const findByTitle = async function (movieName) {
 
 
 export const findByFilter = async function (sortby,order) {
-  console.log(sortby);
-  console.log(order);
+  console.log("Sort by: "+ sortby);
+  console.log("Order: " + order);
   const url ="https://api.themoviedb.org/3/discover/movie?api_key=";
   const apiKEY="af158ebf42ce4f8e554bcd0ba82df8dc";
   // &language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
