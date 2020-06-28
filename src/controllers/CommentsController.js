@@ -1,8 +1,10 @@
+const URL = "https://movie-distribuidas-back.herokuapp.com";
+
 export const getMovieAvgbyId = async (movieId) => {
     let data = {"movieId": movieId};
     console.log("PIRULANGA");
     // console.log(data);
-    const endpoint = "http://s1.ebrainte.com:47000/api/getMovieAvgbyId";
+    const endpoint = `${URL}/api/getMovieAvgbyId`;
     const options = {
         method: "POST",
         body: JSON.stringify(data),
@@ -23,7 +25,7 @@ export const getMovieAvgbyId = async (movieId) => {
 export const getCommentsbyField = async (key,value) => {
     let data = {[key]: value};
     console.log(data);
-    const endpoint = "http://s1.ebrainte.com:47000/api/getCommentsbyField";
+    const endpoint = `${URL}/api/getCommentsbyField`;
     const options = {
         method: "POST",
         body: JSON.stringify(data),
