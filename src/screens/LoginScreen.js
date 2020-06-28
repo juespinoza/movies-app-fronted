@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { theme, Block, Button, Input, Text } from "galio-framework";
 import { login } from "../controllers/UserController";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const { width } = Dimensions.get("window");
 
@@ -42,6 +43,10 @@ class LoginScreen extends React.Component {
       this.setState({ loggedUser: response.data });
       this.storeData(response.data);
       // TODO: manage flashMessage in home
+      showMessage({
+        message: "Iniciaste sesion exitosamente!",
+        type: "success",
+      })
       this.props.navigation.navigate("Home", {
         flashMessage: response.message,
       });
@@ -105,12 +110,12 @@ class LoginScreen extends React.Component {
             </Block>
             <Block flex middle>
               <Button color="error" onPress={this.handleLogin.bind(this)}>
-                Sign in
+                Inicia Sesion
               </Button>
               <Button
                 color="transparent"
                 shadowless
-                onPress={() => navigation.navigate("Register")}
+                onPress={() => navigation.navigate("RegisterScreen")}
               >
                 <Text
                   center

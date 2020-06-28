@@ -21,6 +21,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-components": "0.0.1",
     "react-native-elements": "^2.0.2",
+    "react-native-flash-message": "^0.1.15",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-modal": "^11.5.6",
