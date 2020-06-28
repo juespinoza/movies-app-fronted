@@ -126,12 +126,11 @@ export const logoutScreen = ({ navigation }) => {
   );
 };
 
-
 export const movieListsScreen = ({ navigation }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Movie Lists"
+        name="Lists"
         component={MovieListsScreen}
         options={{
           title: "Listas de películas", //Set Header Title
