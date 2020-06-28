@@ -1,4 +1,4 @@
-const URL = "https://movie-distribuidas-back.herokuapp.com";
+const URL = "http://movie-distribuidas-back.herokuapp.com";
 
 export const getMovieAvgbyId = async (movieId) => {
     let data = {"movieId": movieId};

@@ -115,7 +115,7 @@ export default class DetailsScreen extends React.Component {
             loading: false,
             movieData: responseData
           });
-          // console.log(responseData);  
+          console.log(responseData);  
         });
 
     }, 400)
