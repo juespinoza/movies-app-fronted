@@ -1,61 +1,143 @@
 import React from "react";
 import AsyncStorage from "@react-native-community/async-storage";
-import { SafeAreaView, Dimensions, StyleSheet, FlatList } from "react-native";
-import { Accordion, Text, Block } from "galio-framework";
+import {
+  SafeAreaView,
+  Dimensions,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import { Text, Block, Card, Icon } from "galio-framework";
+import { getAllLists } from "../controllers/MovieListController";
+import theme from "../theme";
 
 const { height, width } = Dimensions.get("window");
 
 export default class MovieLists extends React.Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
-      movies: null,
+      movieLists: [],
+      isLoading: true,
     };
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.setCurrentUser();
     this.getMovies();
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   setCurrentUser = () => {
     const currentUser = this.getData();
-    this.setState({ currentUser });
+    if (this._isMounted) {
+      this.setState({ currentUser });
+    }
   };
 
   getData = async () => {
-    console.log("getting current user");
     try {
       const jsonValue = await AsyncStorage.getItem("@user");
-      console.log("user data", jsonValue);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
-      console.log("Error getting logged user data");
+      console.error("Error getting logged user data with AsyncStorage");
     }
   };
 
   getMovies = async () => {
     // TODO: call to api
-    console.log("llamando a la api de todas las listas");
+    let response = await getAllLists();
+    if (this._isMounted && response.rdo == 0) {
+      this.setState({ movieLists: response.data, isLoading: false });
+    } else {
+      console.error("Was not able to get movie lists");
+    }
+  };
+
+  renderListItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => console.log(item._id)}>
+        <Card
+          flex
+          center
+          borderless
+          shadowColor={theme.COLORS.BLACK}
+          style={styles.author}
+          title={item.name}
+          caption={item.owner}
+          avatar="http://lorempixel.com/80/80/abstract/" //"https://picsum.photos/80"
+          location={
+            <Block row>
+              <Block row middle style={{ marginHorizontal: theme.SIZES.BASE }}>
+                <Icon
+                  name={item.public ? "eye" : "eye-close"}
+                  family="font-awesome"
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                />
+                <Text
+                  p
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                  style={{ marginLeft: theme.SIZES.BASE * 0.25 }}
+                >
+                  {item.public ? "Publico" : "Privado"}
+                </Text>
+              </Block>
+              <Block row middle>
+                <Icon
+                  name="film"
+                  family="font-awesome"
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                />
+                <Text
+                  p
+                  color={theme.COLORS.MUTED}
+                  size={theme.SIZES.FONT * 0.875}
+                  style={{ marginLeft: theme.SIZES.BASE * 0.25 }}
+                >
+                  {item.movies.length}
+                </Text>
+              </Block>
+            </Block>
+          }
+        />
+      </TouchableOpacity>
+    );
   };
 
   render() {
-    const { currentUser, movieLists } = this.state;
+    const { movieLists, isLoading, currentUser } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        {console.log("CU in render", currentUser)}
         {currentUser !== null && (
-          <Block>
+          <Block flex={3}>
             {/* TODO: add buttons for navigation to mis listas, públicas, siguiendo */}
-            <Text flex center h5 muted>
-              Todas las listas públicas
-            </Text>
-            <FlatList
-              data={movieLists}
-              renderItem={({ item }) => <Item title={item.title} />}
-              keyExtractor={(item) => item.id}
-            />
+            <Block center style={{ paddingTop: 20 }}>
+              <Text muted>Todas las listas públicas</Text>
+            </Block>
+            {isLoading && <Text>Cargando películas...</Text>}
+            {!isLoading && (
+              <Block>
+                {movieLists.length > 0 && (
+                  <FlatList
+                    data={movieLists}
+                    renderItem={this.renderListItem}
+                    keyExtractor={(item) => item._id}
+                  />
+                )}
+                {movieLists.length === 0 && (
+                  <Text>No hay películas públicas.</Text>
+                )}
+              </Block>
+            )}
           </Block>
         )}
         {currentUser === null && (
@@ -71,5 +153,9 @@ export default class MovieLists extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  author: {
+    marginTop: 15,
+    width: width * 0.9,
   },
 });
