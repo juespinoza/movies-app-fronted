@@ -4,6 +4,11 @@ import {useState, useEffect} from "react";
 import { Dimensions, SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+
+import { Text, Block } from "galio-framework";
+import AsyncStorage from "@react-native-community/async-storage";
+
+import theme from '../theme';
 import {
   homeScreen,
   registerScreen,
@@ -11,11 +16,7 @@ import {
   logoutScreen,
   movieListsScreen,
 } from "./RouteStackStructure";
-import { Text, Block } from "galio-framework";
-import AsyncStorage from "@react-native-community/async-storage";
 
-
-import theme from '../theme';
 
 const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get("screen");
