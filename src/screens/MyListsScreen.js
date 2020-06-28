@@ -18,7 +18,7 @@ export default class MyListsScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: props.currentUser,
+      currentUser: null,
       movieLists: [],
       isLoading: true,
     };
@@ -26,7 +26,6 @@ export default class MyListsScreen extends React.PureComponent {
 
   componentDidMount() {
     this._isMounted = true;
-    // this.setCurrentUser();
     this.getMovies();
   }
 
@@ -34,36 +33,30 @@ export default class MyListsScreen extends React.PureComponent {
     this._isMounted = false;
   }
 
-  setCurrentUser = () => {
-    const currentUser = this.props.currentUser;
-    // if (this._isMounted) {
-    this.setState({ currentUser });
-    // }
+  getCurrentUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@user");
+      if (jsonValue != null) {
+        this.setState({ currentUser: JSON.parse(jsonValue) });
+      }
+    } catch (e) {
+      console.error("Error getting logged user data with AsyncStorage");
+    }
   };
 
-  // getData = async () => {
-  //   try {
-  //     const jsonValue = await AsyncStorage.getItem("@user");
-  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
-  //   } catch (e) {
-  //     console.error("Error getting logged user data with AsyncStorage");
-  //   }
-  // };
-
   getMovies = async () => {
-    console.log("no me vino?", this.state.currentUser);
-    const {
-      currentUser: { email },
-    } = this.state;
-    console.log("owner?:", email);
-    const ownerData = { email };
-    console.log("ownerData?:", ownerData);
-    let response = await getMyLists();
-    console.log("responseData?:", response);
-    if (this._isMounted && response.rdo == 0) {
-      this.setState({ movieLists: response.data, isLoading: false });
-    } else {
-      console.error("Was not able to get movie lists");
+    try {
+      const currentUser = await this.getCurrentUserData();
+      if (this._isMounted) {
+        const { email } = this.state.currentUser;
+        const ownerData = { email };
+        let response = await getMyLists(ownerData);
+        if (this._isMounted && response.rdo == 0) {
+          this.setState({ movieLists: response.data, isLoading: false });
+        }
+      }
+    } catch (error) {
+      console.error("Error in get my lists: ", error);
     }
   };
 
@@ -158,6 +151,13 @@ export default class MyListsScreen extends React.PureComponent {
             <Text center color={theme.COLORS.ERROR}>
               Tienes que estar logueado para ver esta sección.
             </Text>
+            {/* <Button
+              size="small"
+              color="error"
+              onPress={navigation.navigate("Login")}
+            >
+              Ingresa aquí
+            </Button> */}
           </Block>
         )}
       </SafeAreaView>

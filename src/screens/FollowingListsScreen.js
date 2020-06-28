@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, Block, Card, Icon, Button } from "galio-framework";
-import { getAllLists } from "../controllers/MovieListController";
+import { getFollowingLists } from "../controllers/MovieListController";
 import theme from "../theme";
 
 const { height, width } = Dimensions.get("window");
 
-export default class PublicListsScreen extends React.Component {
+export default class FollowingListsScreen extends React.PureComponent {
   _isMounted = false;
   constructor(props) {
     super(props);
@@ -33,10 +33,12 @@ export default class PublicListsScreen extends React.Component {
     this._isMounted = false;
   }
 
-  getData = async () => {
+  getCurrentUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@user");
-      return JSON.parse(jsonValue);
+      if (jsonValue != null) {
+        this.setState({ currentUser: JSON.parse(jsonValue) });
+      }
     } catch (e) {
       console.error("Error getting logged user data with AsyncStorage");
     }
@@ -44,16 +46,17 @@ export default class PublicListsScreen extends React.Component {
 
   getMovies = async () => {
     try {
-      const currentUser = await this.getData();
+      const currentUser = await this.getCurrentUserData();
       if (this._isMounted) {
-        this.setState({ currentUser: currentUser });
-        let response = await getAllLists();
+        const { email } = this.state.currentUser;
+        const ownerData = { email };
+        let response = await getFollowingLists(ownerData);
         if (this._isMounted && response.rdo == 0) {
           this.setState({ movieLists: response.data, isLoading: false });
         }
       }
     } catch (error) {
-      console.error("Error en get public lists: ", error);
+      console.error("Error en get following lists: ", error);
     }
   };
 
@@ -118,11 +121,11 @@ export default class PublicListsScreen extends React.Component {
         {currentUser !== null && (
           <Block flex={3}>
             <Block center style={{ paddingTop: 20 }}>
-              <Text muted>Todas las listas públicas</Text>
+              <Text muted>Listas de películas las que tienes acceso</Text>
             </Block>
             {isLoading && (
               <Text flex center>
-                Cargando listas de películas públicas...
+                Cargando las listas a las que tienes acceso...
               </Text>
             )}
             {!isLoading && (
@@ -135,8 +138,8 @@ export default class PublicListsScreen extends React.Component {
                   />
                 )}
                 {movieLists.length === 0 && (
-                  <Text flex center>
-                    No hay listas públicas.
+                  <Text flex center style={{ marginTop: 20 }}>
+                    No tienes acceso a ninguna lista.
                   </Text>
                 )}
               </Block>
@@ -151,7 +154,7 @@ export default class PublicListsScreen extends React.Component {
             {/* <Button
               size="small"
               color="error"
-              onPress={navigation.navigate("first")}
+              onPress={navigation.navigate("Login")}
             >
               Ingresa aquí
             </Button> */}
