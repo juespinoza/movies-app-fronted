@@ -4,17 +4,20 @@ import {
   SafeAreaView,
   FlatList,
   Button,
+  Modal,
   View,
   Switch,
   TouchableHighlight,
 } from "react-native";
 import { Item, Input } from "native-base";
 import { Icon, Divider } from "react-native-elements";
-import { theme, withGalio, Text, Card, Block } from "galio-framework";
+import { withGalio, Text, Card, Block } from "galio-framework";
 import { Dropdown } from 'react-native-material-dropdown';
 import { getEstrenos, findByTitle, findByFilter } from "../controllers/TmdbController";
 
-import Modal from 'react-native-modal';
+import theme from '../theme';
+
+// import Modal from 'react-native-modal';
 
 class HomeScreen extends React.Component {
   // To avoid warning of setting state when component is not mounted
@@ -157,19 +160,14 @@ class HomeScreen extends React.Component {
     let { sortby, name } = this.state;
     return (
       <>
-
-      <View style={{ height: "100%" }}>
+      <View style={styles.modal}>
         <Modal
-            isVisible={this.state.isModalVisible}
-            backdropColor="#B4B3DB"
-            backdropOpacity={0.8}
-            animationIn="zoomInDown"
-            animationOut="zoomOutUp"
-            animationInTiming={600}
-            animationOutTiming={600}
-            backdropTransitionInTiming={600}
-            backdropTransitionOutTiming={600}>
-            <View style={{flex: 1}}>
+          visible={this.state.isModalVisible}
+          animationType="fade"
+          onRequestClose={() => { this.toggleModal(); } }
+          transparent={true}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
               <Block>
                 <Dropdown
                   ref={this.sortbyRef}
@@ -185,13 +183,14 @@ class HomeScreen extends React.Component {
                     onValueChange = {this.toggleSwitch}
                     value = {this.state.sortOrder}/>
                 </Block>
-                {/* <Button onPress={this.onFilterButton} style={styles.button} color="success" round>
-                  Buscar
-                </Button> */}
               </Block>
-              <Button title="Hide modal" onPress={this.onFilterButton} />
+              <Button title="Aplicar" onPress={this.onFilterButton} />
             </View>
+          </View>
         </Modal>
+      </View>
+      <View style={{ height: "100%" }}>
+        
         <Item style={styles.itemStyle}>
           <Icon
             type="material-community"
@@ -235,13 +234,35 @@ class HomeScreen extends React.Component {
   }
 }
 
-const styles = (theme) =>
-  StyleSheet.create({
+const styles = StyleSheet.create({
     button: {
       marginBottom: 20,
     },
-    container: {
+    centeredView: {
       flex: 1,
+      // justifyContent: "center",
+      // alignItems: "center",
+      marginTop: 50
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 30,
+      // alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5
+    },
+    container: {
+      marginTop: 10,
+      flex: 1,
+      padding: 1,
       backgroundColor: theme.COLORS.FACEBOOK,
     },
     text: {
@@ -255,6 +276,22 @@ const styles = (theme) =>
       alignSelf: "center",
       backgroundColor: "white",
     },
+    card: {
+      margin: "1%",
+      borderWidth: 2,
+      padding: 0.1,
+      backgroundColor: theme.COLORS.WHITE,
+      width: "98%",
+      marginVertical: theme.SIZES.BASE * 0.2,
+    },
+    cardImageRadius: {
+      borderRadius: theme.SIZES.BASE * 0.1875,
+    },
+    modal: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   });
 
 const sortByData = [
@@ -264,4 +301,4 @@ const sortByData = [
   { value: 'vote_count', label: 'Cantidad de Votos' }
 ];
 
-export default withGalio(HomeScreen, styles);
+export default withGalio(HomeScreen);
