@@ -1,6 +1,13 @@
 import React from "react";
 import AsyncStorage from "@react-native-community/async-storage";
-import { SafeAreaView, Dimensions, StyleSheet, TextInput } from "react-native";
+import {
+  SafeAreaView,
+  Dimensions,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  View,
+} from "react-native";
 import {
   Text,
   Block,
@@ -57,46 +64,56 @@ export default class CreateListScreen extends React.PureComponent {
   //   }
   // };
 
-  // handleCreation = () => {
-  //   const data = {
-  //     name: this.state.name,
-  //     public: !this.state.private,
-  //     owner: this.state.owner,
-  //     authorizedUsers: this.state.authorizedUsers,
-  //     movies: this.state.movies,
-  //   };
-  //   // TODO: validate user data
-  //   this.setMovieList(data);
-  // };
+  handleCreation = () => {
+    const data = {
+      name: this.state.name,
+      public: !this.state.private,
+      owner: this.state.owner,
+      authorizedUsers: this.state.authorizedUsers.split(", "),
+      movies: this.state.movies,
+    };
+    // TODO: validate data
+    this.createMovieList(data);
+  };
 
-  // setMovieList = async (listData) => {
-  //   let response = await createMovieList(listData);
-  //   if (response.rdo == 0) {
-  //     // TODO: manage flashMessage in home
-  //     // this.props.navigation.navigate("Lists", {
-  //     //   flashMessage: response.message,
-  //     // });
-  //   } else {
-  //     return Alert("Usuario no registrado!", `${response.message}`);
-  //   }
-  // };
+  createMovieList = async (listData) => {
+    console.log("creating list: ", listData);
+    // let response = await createMovieList(listData);
+    // if (response.rdo == 0) {
+    //   // TODO: manage flashMessage in home
+    //   // this.props.navigation.navigate("Lists", {
+    //   //   flashMessage: response.message,
+    //   // });
+    // } else {
+    //   return Alert("Usuario no registrado!", `${response.message}`);
+    // }
+  };
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <Block flex={4} center style={{ width: width * 0.9, marginTop: 20 }}>
-          <Text
-            muted
-            center
-            style={{ marginTop: 0, marginBottom: 20, width: width * 0.9 }}
-          >
+      <Block
+        safe
+        flex
+        center
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        {/* <KeyboardAvoidingView behavior="height" enabled> */}
+        <View flex={1} style={{ width: width * 0.9 }}>
+          <Text muted>
             Crea una lista para tener todas tus peliculas en un lugar
           </Text>
+        </View>
+        <View flex={4} style={{ width: width * 0.9 }}>
           <Input
             placeholder="Nombre de la lista"
             autoCapitalize="none"
-            style={{ width: width * 0.9 }}
             onChangeText={(text) => this.handleChange("name", text)}
+            style={{ marginTop: 15 }}
           />
           <Checkbox
             color="#666"
@@ -105,20 +122,21 @@ export default class CreateListScreen extends React.PureComponent {
             iconFamily="font-awesome"
             iconName="lock"
             onChange={(value) => this.handleChange("private", value)}
+            style={{ marginTop: 5, alignSelf: "flex-end" }}
           />
-          <TextInput
+          <Input
             placeholder="Emails de usuarios autorizados"
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderWidth: 1,
-              width: width * 0.9,
-            }}
             onChangeText={(text) => this.handleChange("authorizedUsers", text)}
+            style={{ marginTop: 15 }}
           />
-          {/* TODO: implement genre list */}
-        </Block>
-      </SafeAreaView>
+        </View>
+        <View flex={1} style={{ width: width * 0.9 }}>
+          <Button color="error" onPress={this.handleCreation.bind(this)}>
+            Crear lista
+          </Button>
+        </View>
+        {/* </KeyboardAvoidingView> */}
+      </Block>
     );
   }
 }
@@ -126,9 +144,5 @@ export default class CreateListScreen extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  author: {
-    marginTop: 15,
-    width: width * 0.9,
   },
 });
