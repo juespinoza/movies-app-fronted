@@ -6,8 +6,18 @@ import DetailsScreen from "../screens/DetailsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import LoginScreen from "../screens/LoginScreen";
 import LogoutScreen from "../screens/LogoutScreen";
+import MovieListsScreen from "../screens/MovieListsScreen";
 
 const Stack = createStackNavigator();
+
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem("@user");
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    console.error("Error getting logged user data with AsyncStorage");
+  }
+};
 
 export const homeScreen = ({ navigation }) => {
   return (
@@ -110,6 +120,28 @@ export const logoutScreen = ({ navigation }) => {
           headerTitleStyle: {
             fontWeight: "bold", //Set Header text style
           },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+
+export const movieListsScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Movie Lists"
+        component={MovieListsScreen}
+        options={{
+          title: "Listas de películas", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
         }}
       />
     </Stack.Navigator>
