@@ -97,7 +97,7 @@ export const createMovieList = async (data) => {
   try {
     let response = await fetch(endpoint, options);
     let responseStatus = response.status;
-    let responseData = response.data;
+    let responseData = await response.json();
 
     switch (responseStatus) {
       case 200: {

@@ -66,7 +66,7 @@ export const getUsers = async function () {
   const users = apiResponse.data.docs;
   let userResponse = users.map((user) => ({
     name: user.email,
-    id: user._id,
+    id: user.email,
   }));
   return userResponse;
 };

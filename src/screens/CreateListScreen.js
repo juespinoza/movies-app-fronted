@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React, { Children, isValidElement } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 import {
   SafeAreaView,
@@ -32,10 +32,8 @@ export default class CreateListScreen extends React.PureComponent {
     super(props);
     this.state = {
       owner: "",
-      authorizedUsers: [],
       name: "",
       private: true,
-      movies: [],
       selectedMovies: [],
       selectedUsers: [],
       allMovies: [],
@@ -44,15 +42,12 @@ export default class CreateListScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log("mounted");
     this._isMounted = true;
     this.getAllMovies();
     this.getAllUsers();
-    // this.setCurrentUserData();
   }
 
   componentWillUnmount() {
-    console.log("UNmounted");
     this._isMounted = false;
   }
 
@@ -100,43 +95,68 @@ export default class CreateListScreen extends React.PureComponent {
     }
   };
 
-  // setCurrentUserData = async () => {
-  //   try {
-  //     const jsonValue = await AsyncStorage.getItem("@user");
-  //     if (jsonValue != null) {
-  //       currentUser = JSON.parse(jsonValue);
-  //       console.log("encontramos user: ", currentUser);
-  //       this.setState({ owner: currentUser.email });
-  //       console.log("state user: ", this.state.owner);
-  //     }
-  //   } catch (e) {
-  //     console.error("Error getting logged user data with AsyncStorage");
-  //   }
-  // };
+  getCurrentUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@user");
+      if (jsonValue != null) {
+        const currentUser = JSON.parse(jsonValue);
+        this.setState({ owner: currentUser.email });
+      }
+    } catch (e) {
+      console.error("Error getting logged user data with AsyncStorage");
+    }
+  };
 
   handleCreation = () => {
     const data = {
       name: this.state.name,
       public: !this.state.private,
-      owner: this.state.owner,
-      authorizedUsers: this.state.authorizedUsers.split(", "),
-      movies: this.state.movies,
+      authorizedUsers: this.state.selectedUsers,
+      movies: this.state.selectedMovies,
     };
-    // TODO: validate data
     this.createMovieList(data);
   };
 
+  validateData = () => {
+    let isValid = false;
+    let message = "";
+    const { name, owner } = this.state;
+    if (name === null || name === "") {
+      isValid = false;
+      message = "Verifica el nombre de la lista";
+    }
+    if (owner === null || owner === "") {
+      isValid = false;
+      message = "Tienes que estar logueado";
+    }
+    return { isValid, message };
+  };
+
   createMovieList = async (listData) => {
-    console.log("creating list: ", listData);
-    // let response = await createMovieList(listData);
-    // if (response.rdo == 0) {
-    //   // TODO: manage flashMessage in home
-    //   // this.props.navigation.navigate("Lists", {
-    //   //   flashMessage: response.message,
-    //   // });
-    // } else {
-    //   return Alert("Usuario no registrado!", `${response.message}`);
-    // }
+    try {
+      if (this._isMounted) {
+        const currentUser = await this.getCurrentUserData();
+        const email = this.state.owner;
+        listData.owner = email;
+        const { isValid, message } = this.validateData();
+        if (!isValid) {
+          let response = await createMovieList(listData);
+          if (response.rdo == 0) {
+            this.setState({
+              name: "",
+              public: false,
+              selectedMovies: [],
+              selectedUsers: [],
+            });
+            return alert("Lista creada", `Nombre: ${response.data.name}`);
+          }
+        } else {
+          return alert("Error", message);
+        }
+      }
+    } catch (error) {
+      console.error("Error al crear lista", error);
+    }
   };
 
   render() {
@@ -175,7 +195,18 @@ export default class CreateListScreen extends React.PureComponent {
               onChange={(value) => this.handleChange("private", value)}
               style={{ marginTop: 5, alignSelf: "flex-end" }}
             />
-            <View style={{ height: 125, width: width * 0.9 }}>
+            <View
+              style={{
+                marginTop: 15,
+                width: width * 0.9,
+                backgroundColor: "white",
+                borderColor: "gray",
+                borderWidth: 1,
+                borderRadius: 5,
+                paddingBottom: 5,
+                paddingLeft: 5,
+              }}
+            >
               <SectionedMultiSelect
                 items={this.state.allUsers}
                 uniqueKey="id"
@@ -190,7 +221,18 @@ export default class CreateListScreen extends React.PureComponent {
                 selectedItems={selectedUsers}
               />
             </View>
-            <View style={{ height: 125, width: width * 0.9 }}>
+            <View
+              style={{
+                marginTop: 15,
+                width: width * 0.9,
+                backgroundColor: "white",
+                borderColor: "gray",
+                borderWidth: 1,
+                borderRadius: 5,
+                paddingBottom: 5,
+                paddingLeft: 5,
+              }}
+            >
               <SectionedMultiSelect
                 items={this.state.allMovies}
                 uniqueKey="id"
