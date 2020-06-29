@@ -58,3 +58,15 @@ export const login = async (data) => {
     return { rdo: 1, mensaje: error };
   }
 };
+
+export const getUsers = async function () {
+  const endpoint = `${URL}/user`;
+  let result = await fetch(endpoint);
+  let apiResponse = await result.json();
+  const users = apiResponse.data.docs;
+  let userResponse = users.map((user) => ({
+    name: user.email,
+    id: user.email,
+  }));
+  return userResponse;
+};
