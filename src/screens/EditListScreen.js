@@ -26,16 +26,17 @@ import { getUsers } from "../controllers/UserController";
 
 const { height, width } = Dimensions.get("window");
 
-export default class CreateListScreen extends React.PureComponent {
+export default class EditListScreen extends React.PureComponent {
   _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
-      owner: "",
-      name: "",
-      private: true,
-      selectedMovies: [],
-      selectedUsers: [],
+      list: props.list,
+      owner: props.list.owner,
+      name: props.list.name,
+      private: !props.list.public,
+      selectedMovies: props.list.movies,
+      selectedUsers: props.list.authorizedUsers,
       allMovies: [],
       allUsers: [],
     };
@@ -72,7 +73,7 @@ export default class CreateListScreen extends React.PureComponent {
       let movies = await getMovies();
       const allMovies = [
         {
-          name: "Las pelis más populares",
+          name: "Todas las Películas",
           id: 0,
           children: movies,
         },
@@ -170,7 +171,6 @@ export default class CreateListScreen extends React.PureComponent {
   };
 
   render() {
-    const { navigation } = this.props;
     const { selectedMovies, selectedUsers } = this.state;
     return (
       <Block

@@ -18,6 +18,7 @@ import {
   logoutScreen,
   movieListsScreen,
   createListsScreen,
+  manageListsScreen,
 } from "./RouteStackStructure";
 
 const Drawer = createDrawerNavigator();
@@ -104,6 +105,11 @@ function AppContainer() {
           name="Createlists"
           options={{ drawerLabel: "Crear Lista de pelis" }}
           component={createListsScreen}
+        />
+        <Drawer.Screen
+          name="Manageelists"
+          options={{ drawerLabel: "Adminitrar Lista de pelis" }}
+          component={manageListsScreen}
         />
         {!isLoggedIn && (
           <Drawer.Screen

@@ -51,7 +51,7 @@ export default class MyListsScreen extends React.PureComponent {
         const { email } = this.state.currentUser;
         const ownerData = { email };
         let response = await getMyLists(ownerData);
-        if (this._isMounted && response.rdo == 0) {
+        if (response.rdo == 0) {
           this.setState({ movieLists: response.data, isLoading: false });
         }
       }

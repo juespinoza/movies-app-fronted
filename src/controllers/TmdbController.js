@@ -82,14 +82,16 @@ export const findByFilter = async function (sortby, order) {
 export const getMovies = async function () {
   //Parametros de conexion
   const url = "https://api.themoviedb.org/3/discover/movie?api_key=";
-  const discover =
-    "&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=1";
   const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
-
-  const endpoint = `${url}${apiKEY}${discover}`;
-  let result = await fetch(endpoint);
-  let apiResponse = await result.json();
-  const estrenos = apiResponse.results;
+  let estrenos = [];
+  for (i = 1; i <= 50; i++) {
+    const discover = `&sort_by=popularity.desc&include_adult=false&page=${i}`;
+    const endpoint = `${url}${apiKEY}${discover}`;
+    let result = await fetch(endpoint);
+    let apiResponse = await result.json();
+    estrenos = estrenos.concat(apiResponse.results);
+  }
+  console.log("-----got", estrenos.length);
 
   let estrenosResponse = estrenos.map((movie) => ({
     name: movie.title,
