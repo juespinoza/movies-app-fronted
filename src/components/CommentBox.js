@@ -3,12 +3,18 @@ import { Button as Boton } from "native-base";
 import { Rating, AirbnbRating, Button } from "react-native-elements";
 import { View, StyleSheet, TextInput, Text } from "react-native";
 
+import { useNavigation } from '@react-navigation/native';
+
 import { insertComment } from "../controllers/CommentsController";
 
-export default function CommentBox({userLoggedIn, userData, movieId}) {
+import { showMessage, hideMessage } from "react-native-flash-message";
+
+export default function CommentBox({userLoggedIn, userData, movieId,props}) {
   const [stars, setStars] = useState(3);
   const [comment, setComment] = useState("");
   const {checkLogin} = userLoggedIn;
+
+  const navigation = useNavigation();
 
   const ratingCompleted = (rating) => {
       console.log("El puntaje es: " + rating)
@@ -26,10 +32,21 @@ export default function CommentBox({userLoggedIn, userData, movieId}) {
       console.log(now);
       console.log(comment);
     //   this.setState({loading: true});
+    showMessage({
+        message: "Comentario realizado con exito!",
+        type: "success",
+      });
       let result = insertComment(movieId,data,stars,now,comment);
+
     //   console.log(result);
     //   this.setState({ commentData: result, loading: false });
       
+  };
+
+  const gotoLogin = () => {
+      navigation.navigate("LoginScreen", {
+        flashMessage: "Iniciando Sesion",
+      });
   };
 
   const onChangeTxt = (e) => setComment(e);
@@ -72,12 +89,10 @@ export default function CommentBox({userLoggedIn, userData, movieId}) {
             <>
             <View style={{ height: 120 }}>
                 <Text> Tenes que estar logueado para comentar </Text>
-            </View>
-            <View style={styles.sendComment}>
                 <Button
-                    title="Comentar"
+                    title="Iniciar Sesion"
                     buttonStyle={styles.btnStyle}
-                    onPress={sendComment}
+                    onPress={gotoLogin}
                 />
             </View>
             </>

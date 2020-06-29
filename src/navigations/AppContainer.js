@@ -8,7 +8,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Text, Block } from "galio-framework";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import theme from "../theme";
+import FlashMessage from "react-native-flash-message";
+
+import theme from '../theme';
 import {
   homeScreen,
   registerScreen,
@@ -47,30 +49,39 @@ function AppContainer() {
     </SafeAreaView>
   );
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState();
 
   useEffect(() => {
-    checkUserSignedIn();
+    checkUserSignedIn2();
   }, []);
 
-  checkUserSignedIn = async () => {
-    try {
-      let value = await AsyncStorage.getItem("@user");
-      // console.log("USER DATA: " + value);
-      if (value != null) {
-        console.log("LOGGED IN");
-        let data = JSON.parse(value);
-        setIsLoggedIn(true);
-      } else {
-        console.log("NOT LOGGED IN");
-        setIsLoggedIn(false);
+
+
+  checkUserSignedIn2 = async () =>{
+      try {
+          let value = await AsyncStorage.getItem("@user");
+          console.log("USER DATA IN MENU: " + value);
+          if (value != null){
+              console.log("LOGGED IN");
+              console.log(isLoggedIn);
+              setIsLoggedIn(true);
+          }
+          else {
+              console.log("NOT LOGGED IN IN MENU");
+              setIsLoggedIn(false);
+              console.log(isLoggedIn);
+          }
+      } catch (error) {
+          console.log(error);
+          console.log("ERROR GETTING USER DATA");
       }
-    } catch (error) {
-      console.log(error);
-      console.log("ERROR GETTING USER DATA");
-    }
-  };
+  }
+
+  this.interval = setInterval(() => this.checkUserSignedIn2(), 4000);
+
   return (
+    <>
     <NavigationContainer>
       <Drawer.Navigator
         drawerContentOptions={{
@@ -108,6 +119,13 @@ function AppContainer() {
             component={registerScreen}
           />
         )}
+        {!isLoggedIn && (
+        <Drawer.Screen
+          name="RegisterScreen"
+          options={{ drawerLabel: "Registrarse" }}
+          component={registerScreen}
+        />
+        )}
         {isLoggedIn && (
           <Drawer.Screen
             name="LogoutScreen"
@@ -117,6 +135,8 @@ function AppContainer() {
         )}
       </Drawer.Navigator>
     </NavigationContainer>
+    <FlashMessage position="bottom" />
+    </>
   );
 }
 
