@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   View,
+  Alert,
 } from "react-native";
 import {
   Text,
@@ -22,7 +23,6 @@ import theme from "../theme";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { getMovies } from "../controllers/TmdbController";
 import { getUsers } from "../controllers/UserController";
-import { useScreens } from "react-native-screens";
 
 const { height, width } = Dimensions.get("window");
 
@@ -148,7 +148,17 @@ export default class CreateListScreen extends React.PureComponent {
               selectedMovies: [],
               selectedUsers: [],
             });
-            return alert("Lista creada", `Nombre: ${response.data.name}`);
+            return Alert.alert(
+              "Lista creada!",
+              `El nombre de tu lista es: ${response.data.name}`,
+              [
+                {
+                  text: "OK",
+                  onPress: () => this.props.navigation.navigate("Lists"),
+                },
+              ],
+              { cancelable: false }
+            );
           }
         } else {
           return alert("Error", message);
@@ -160,6 +170,7 @@ export default class CreateListScreen extends React.PureComponent {
   };
 
   render() {
+    const { navigation } = this.props;
     const { selectedMovies, selectedUsers } = this.state;
     return (
       <Block

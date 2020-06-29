@@ -5,7 +5,6 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import PublicListsScreen from "./PublicListsScreen";
 import MyListsScreen from "./MyListsScreen";
 import FollowingListsScreen from "./FollowingListsScreen";
-import CreateListScreen from "./CreateListScreen";
 
 const initialLayout = { width: Dimensions.get("window").width };
 
@@ -15,7 +14,6 @@ export default function MovieListsScreen(props) {
     { key: "first", title: "Públicas" },
     { key: "second", title: "Privadas" },
     { key: "third", title: "Propias" },
-    { key: "fourth", title: "+" },
   ]);
 
   const renderScene = ({ route }) => {
@@ -26,8 +24,6 @@ export default function MovieListsScreen(props) {
         return <FollowingListsScreen navigation={props.navigation} />;
       case "third":
         return <MyListsScreen navigation={props.navigation} />;
-      case "fourth":
-        return <CreateListScreen navigation={props.navigation} />;
       default:
         return null;
     }

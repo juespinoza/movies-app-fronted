@@ -15,6 +15,7 @@ import {
   loginScreen,
   logoutScreen,
   movieListsScreen,
+  createListsScreen,
 } from "./RouteStackStructure";
 
 const Drawer = createDrawerNavigator();
@@ -83,11 +84,15 @@ function AppContainer() {
           options={{ drawerLabel: "Buscar Pelis" }}
           component={homeScreen}
         />
-
         <Drawer.Screen
           name="Lists"
-          options={{ drawerLabel: "Listas de películas" }}
+          options={{ drawerLabel: "Ver listas de pelis" }}
           component={movieListsScreen}
+        />
+        <Drawer.Screen
+          name="Createlists"
+          options={{ drawerLabel: "Crear Lista de pelis" }}
+          component={createListsScreen}
         />
         {!isLoggedIn && (
           <Drawer.Screen
@@ -96,11 +101,13 @@ function AppContainer() {
             component={loginScreen}
           />
         )}
-        <Drawer.Screen
-          name="RegisterScreen"
-          options={{ drawerLabel: "Registrarse" }}
-          component={registerScreen}
-        />
+        {!isLoggedIn && (
+          <Drawer.Screen
+            name="RegisterScreen"
+            options={{ drawerLabel: "Registrarse" }}
+            component={registerScreen}
+          />
+        )}
         {isLoggedIn && (
           <Drawer.Screen
             name="LogoutScreen"
