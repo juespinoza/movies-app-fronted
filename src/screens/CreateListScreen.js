@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 import {
   SafeAreaView,
@@ -19,6 +19,9 @@ import {
 } from "galio-framework";
 import { createMovieList } from "../controllers/MovieListController";
 import theme from "../theme";
+import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import { getEstrenos } from "../controllers/TmdbController";
+import { useScreens } from "react-native-screens";
 
 const { height, width } = Dimensions.get("window");
 
@@ -32,12 +35,16 @@ export default class CreateListScreen extends React.PureComponent {
       name: "",
       private: true,
       movies: [],
+      selectedItems: [],
+      allMovies: [],
     };
   }
 
   componentDidMount() {
     console.log("mounted");
     this._isMounted = true;
+    this.getAllMovies();
+    //this.getAllUsers();
     // this.setCurrentUserData();
   }
 
@@ -48,6 +55,29 @@ export default class CreateListScreen extends React.PureComponent {
 
   handleChange = (name, value) => {
     this.setState({ [name]: value });
+  };
+  onSelectedItemsChange = (selectedItems) => {
+    if (this._isMounted) {
+      this.setState({ selectedItems });
+    }
+  };
+
+  getAllMovies = async () => {
+    if (this._isMounted) {
+      let movies = await getEstrenos();
+      const allMovies = [
+        {
+          name: "Todas las Películas",
+          id: 0,
+          children: movies.map((movie) => ({
+            name: movie.title,
+            id: movie.id,
+          })),
+        },
+      ];
+      this.setState({ allMovies });
+      console.log("stated movies?---------", this.state.allMovies);
+    }
   };
 
   // setCurrentUserData = async () => {
@@ -90,6 +120,7 @@ export default class CreateListScreen extends React.PureComponent {
   };
 
   render() {
+    const { allMovies, selectedItems } = this.state;
     return (
       <Block
         safe
@@ -103,12 +134,12 @@ export default class CreateListScreen extends React.PureComponent {
         }}
       >
         {/* <KeyboardAvoidingView behavior="height" enabled> */}
-        <View flex={1} style={{ width: width * 0.9 }}>
+        <View style={{ width: width * 0.9, marginTop: 20 }}>
           <Text muted>
             Crea una lista para tener todas tus peliculas en un lugar
           </Text>
         </View>
-        <View flex={4} style={{ width: width * 0.9 }}>
+        <View flex={3} style={{ width: width * 0.9 }}>
           <Input
             placeholder="Nombre de la lista"
             autoCapitalize="none"
@@ -129,6 +160,21 @@ export default class CreateListScreen extends React.PureComponent {
             onChangeText={(text) => this.handleChange("authorizedUsers", text)}
             style={{ marginTop: 15 }}
           />
+          <View style={{ height: 100, width: width * 0.9 }}>
+            <SectionedMultiSelect
+              items={this.state.allMovies}
+              uniqueKey="id"
+              subKey="children"
+              selectText="Peliculas deseadas"
+              searchPlaceholderText="Buscar"
+              selectedText="seleccionadas"
+              showDropDowns={false}
+              expandDropDowns={true}
+              readOnlyHeadings={true}
+              onSelectedItemsChange={this.onSelectedItemsChange}
+              selectedItems={selectedItems}
+            />
+          </View>
         </View>
         <View flex={1} style={{ width: width * 0.9 }}>
           <Button color="error" onPress={this.handleCreation.bind(this)}>
