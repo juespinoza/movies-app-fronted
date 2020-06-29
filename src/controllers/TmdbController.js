@@ -11,7 +11,7 @@ const createData = (item, idArray) => {
     popularity: item.popularity,
     lang: item.original_language,
     avg: item.vote_average,
-    count: item.vote_count
+    count: item.vote_count,
   };
 };
 
@@ -57,14 +57,13 @@ export const findByTitle = async function (movieName) {
   return foundMovies;
 };
 
-
-export const findByFilter = async function (sortby,order) {
-  console.log("Sort by: "+ sortby);
+export const findByFilter = async function (sortby, order) {
+  console.log("Sort by: " + sortby);
   console.log("Order: " + order);
-  const url ="https://api.themoviedb.org/3/discover/movie?api_key=";
-  const apiKEY="af158ebf42ce4f8e554bcd0ba82df8dc";
+  const url = "https://api.themoviedb.org/3/discover/movie?api_key=";
+  const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
   // &language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
-  const search= `${"&language=en-US&sort_by="}${sortby}.${order}${"&include_adult=false&include_video=false&page=1"}`;
+  const search = `${"&language=en-US&sort_by="}${sortby}.${order}${"&include_adult=false&include_video=false&page=1"}`;
 
   const endpoint = `${url}${apiKEY}${search}`;
   let result = await fetch(endpoint);
@@ -78,4 +77,24 @@ export const findByFilter = async function (sortby,order) {
   }
   //console.log("estrenos a mostrar", estrenosAMostrar);
   return foundMovies;
+};
+
+export const getMovies = async function () {
+  //Parametros de conexion
+  const url = "https://api.themoviedb.org/3/discover/movie?api_key=";
+  const discover =
+    "&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=1";
+  const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
+
+  const endpoint = `${url}${apiKEY}${discover}`;
+  let result = await fetch(endpoint);
+  let apiResponse = await result.json();
+  const estrenos = apiResponse.results;
+
+  let estrenosResponse = estrenos.map((movie) => ({
+    name: movie.title,
+    id: movie.id,
+  }));
+
+  return estrenosResponse;
 };
