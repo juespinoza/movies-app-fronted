@@ -113,13 +113,6 @@ function AppContainer() {
           />
         )}
         {!isLoggedIn && (
-          <Drawer.Screen
-            name="RegisterScreen"
-            options={{ drawerLabel: "Registrarse" }}
-            component={registerScreen}
-          />
-        )}
-        {!isLoggedIn && (
         <Drawer.Screen
           name="RegisterScreen"
           options={{ drawerLabel: "Registrarse" }}
