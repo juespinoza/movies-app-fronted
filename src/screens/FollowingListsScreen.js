@@ -47,13 +47,17 @@ export default class FollowingListsScreen extends React.PureComponent {
   getMovies = async () => {
     try {
       const currentUser = await this.getCurrentUserData();
-      if (this._isMounted) {
+      if (
+        this._isMounted &&
+        (currentUser != "undefined" || currentUser != null)
+      ) {
         const { email } = this.state.currentUser;
         const ownerData = { email };
         let response = await getFollowingLists(ownerData);
         if (this._isMounted && response.rdo == 0) {
           this.setState({ movieLists: response.data, isLoading: false });
         }
+      } else {
       }
     } catch (error) {
       console.error("Error en get following lists: ", error);

@@ -12,6 +12,7 @@ import { theme, Block, Button, Input, Text, NavBar } from "galio-framework";
 import { registration } from "../controllers/UserController";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { GENRES } from "./shared/genres";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const items = GENRES;
 
@@ -49,10 +50,15 @@ class RegisterScreen extends React.Component {
   };
 
   setRegistration = async (userData) => {
+    console.log("Registrando");
     let response = await registration(userData);
     if (response.rdo == 0) {
       // TODO: manage flashMessage in home
-      this.props.navigation.navigate("Login", {
+      showMessage({
+        message: "usuario creado!",
+        type: "info",
+      });
+      this.props.navigation.navigate("LoginScreen", {
         flashMessage: response.message,
       });
     } else {
@@ -104,7 +110,18 @@ class RegisterScreen extends React.Component {
                 style={{ width: width * 0.9 }}
                 onChangeText={(text) => this.handleChange("password", text)}
               />
-              <View style={{ backgroundColor: "white" }}>
+              <View
+                style={{
+                  marginTop: 15,
+                  width: width * 0.9,
+                  backgroundColor: "white",
+                  borderColor: "gray",
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingBottom: 5,
+                  paddingLeft: 5,
+                }}
+              >
                 <SectionedMultiSelect
                   items={items}
                   uniqueKey="id"
@@ -123,7 +140,7 @@ class RegisterScreen extends React.Component {
             <Block flex middle>
               <Button
                 color="error"
-                onPress={this.handleRegistration.bind(this)}
+                onPress={() => this.handleRegistration.bind(this)}
               >
                 Sign up
               </Button>
