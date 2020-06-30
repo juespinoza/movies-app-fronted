@@ -72,10 +72,8 @@ export default class ManageListsScreen extends React.PureComponent {
     try {
       if (this._isMounted) {
         const currentUser = await this.getCurrentUserData();
-        console.log("--------------------------current user", this.state.owner);
         const { owner } = this.state;
         if (owner !== "") {
-          console.log("--------------------------current user", owner);
           let response = await getMyLists({ owner });
           if (response.rdo == 0) {
             this.setState({ myLists: response.data, isLoading: false });
@@ -107,7 +105,9 @@ export default class ManageListsScreen extends React.PureComponent {
         <View style={{ width: width * 0.8, marginTop: 10 }}>
           <TouchableOpacity
             style={{ marginTop: 10 }}
-            onPress={() => console.log(item._id)}
+            onPress={() =>
+              this.props.navigation.navigate("EditList", { list: item })
+            }
           >
             <Card
               flex
@@ -179,6 +179,7 @@ export default class ManageListsScreen extends React.PureComponent {
   };
 
   render() {
+    const { navigation } = this.props;
     const { myLists, isLoading } = this.state;
     return (
       <SafeAreaView style={styles.container}>

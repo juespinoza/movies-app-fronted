@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   View,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import {
   Text,
@@ -21,8 +22,9 @@ import {
 import { createMovieList } from "../controllers/MovieListController";
 import theme from "../theme";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
-import { getMovies } from "../controllers/TmdbController";
+import { getMovies, getAmovie } from "../controllers/TmdbController";
 import { getUsers } from "../controllers/UserController";
+import { SaveItem, ReadItem } from "../screens/shared/storage";
 
 const { height, width } = Dimensions.get("window");
 
@@ -30,27 +32,54 @@ export default class EditListScreen extends React.PureComponent {
   _isMounted = false;
   constructor(props) {
     super(props);
+    const {
+      params: { list },
+    } = props.route;
     this.state = {
-      list: props.list,
-      owner: props.list.owner,
-      name: props.list.name,
-      private: !props.list.public,
-      selectedMovies: props.list.movies,
-      selectedUsers: props.list.authorizedUsers,
+      list: list,
+      owner: list.owner,
+      name: list.name,
+      private: !list.public,
+      selectedMovies: [],
+      selectedUsers: [],
       allMovies: [],
       allUsers: [],
+      usersLoading: true,
+      moviesLoading: true,
+      previousMovies: [],
     };
   }
 
   componentDidMount() {
     this._isMounted = true;
-    this.getAllMovies();
     this.getAllUsers();
+    this.getAllMovies();
+    this.setPreviousMovies();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
   }
+
+  setPreviousMovies = async () => {
+    if (this._isMounted) {
+      const { list } = this.state;
+      const previousMovies = [];
+
+      for (const id of list.movies) {
+        const movie = await this.getMovie(id);
+        previousMovies.push(movie);
+      }
+      this.setState({ previousMovies });
+    }
+  };
+
+  getMovie = async (id) => {
+    if (this._isMounted) {
+      const movie = await getAmovie(id);
+      return movie;
+    }
+  };
 
   handleChange = (name, value) => {
     this.setState({ [name]: value });
@@ -64,21 +93,77 @@ export default class EditListScreen extends React.PureComponent {
 
   onSelectedUsersChange = (selectedUsers) => {
     if (this._isMounted) {
-      this.setState({ selectedUsers });
+      this.saveItems("@selectedUsers", selectedUsers);
+      this.editForm("@selectedUsers");
+    }
+  };
+
+  setSelectedUsers = () => {
+    if (this._isMounted) {
+      const { list, allUsers } = this.state;
+      const selectedItems = allUsers[0].users
+        .filter((user) => list.authorizedUsers.includes(user.id))
+        .map((movieObj) => movieObj.name);
+      this.saveItems("@selectedUsers", selectedItems);
+      this.editForm("@selectedUsers");
+      this.setState({ usersLoading: false });
+    }
+  };
+
+  removePrevMovies = (id) => {
+    if (this._isMounted) {
+      const { previousMovies } = this.state;
+      if (previousMovies.length > 0) {
+        const currentMovies = previousMovies.filter((movie) => movie.id !== id);
+        this.setState({ previousMovies: currentMovies });
+      }
+    }
+  };
+
+  // get items for a form
+  editForm = (key) => {
+    if (this._isMounted) {
+      ReadItem(key).then((result) => {
+        if (this._isMounted && key == "@selectedUsers") {
+          const selected = JSON.parse(result);
+
+          this.setState({
+            selectedUsers: selected,
+          });
+        }
+      });
+    }
+  };
+
+  // save form data using each forms name
+  saveItems = (key, value) => {
+    if (this._isMounted) {
+      const items = JSON.stringify(value);
+
+      SaveItem(key, items)
+        .then((res) => {
+          console.info(`storaged on ${key}`);
+        })
+        .catch((e) => console.warn(e));
     }
   };
 
   getAllMovies = async () => {
-    if (this._isMounted) {
-      let movies = await getMovies();
-      const allMovies = [
-        {
-          name: "Todas las Películas",
-          id: 0,
-          children: movies,
-        },
-      ];
-      this.setState({ allMovies });
+    try {
+      if (this._isMounted) {
+        const { list } = this.state;
+        let movies = await getMovies();
+        const allMovies = [
+          {
+            name: "Las pelis más populares",
+            id: 0,
+            movies: movies.filter((movie) => !list.movies.includes(movie.id)),
+          },
+        ];
+        this.setState({ allMovies, moviesLoading: false });
+      }
+    } catch (error) {
+      console.error("Error saving async pelis", error);
     }
   };
 
@@ -89,33 +174,27 @@ export default class EditListScreen extends React.PureComponent {
         {
           name: "Todos los Usuarios",
           id: 0,
-          children: users,
+          users,
         },
       ];
       this.setState({ allUsers });
-    }
-  };
-
-  getCurrentUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("@user");
-      if (jsonValue != null) {
-        const currentUser = JSON.parse(jsonValue);
-        this.setState({ owner: currentUser.email });
-      }
-    } catch (e) {
-      console.error("Error getting logged user data with AsyncStorage");
+      this.setSelectedUsers();
     }
   };
 
   handleCreation = () => {
+    const { selectedMovies, previousMovies } = this.state;
+    const prevIds = previousMovies.map((movie) => movie.id);
+    let movies = selectedMovies.concat(prevIds);
+
     const data = {
       name: this.state.name,
       public: !this.state.private,
       authorizedUsers: this.state.selectedUsers,
-      movies: this.state.selectedMovies,
+      movies,
     };
-    this.createMovieList(data);
+    console.log("data to send", data);
+    //this.createMovieList(data);
   };
 
   validateData = () => {
@@ -136,9 +215,6 @@ export default class EditListScreen extends React.PureComponent {
   createMovieList = async (listData) => {
     try {
       if (this._isMounted) {
-        const currentUser = await this.getCurrentUserData();
-        const email = this.state.owner;
-        listData.owner = email;
         const { isValid, message } = this.validateData();
         if (!isValid) {
           let response = await createMovieList(listData);
@@ -171,7 +247,9 @@ export default class EditListScreen extends React.PureComponent {
   };
 
   render() {
-    const { selectedMovies, selectedUsers } = this.state;
+    const { moviesLoading, usersLoading, previousMovies } = this.state;
+    const isLoading = moviesLoading && usersLoading;
+
     return (
       <Block
         safe
@@ -184,87 +262,115 @@ export default class EditListScreen extends React.PureComponent {
           alignContent: "center",
         }}
       >
-        <KeyboardAvoidingView behavior="height" enabled>
-          <View style={{ width: width * 0.9, marginTop: 20 }}>
-            <Text muted>
-              Crea una lista para tener todas tus peliculas en un lugar
-            </Text>
-          </View>
-          <View flex={4} style={{ width: width * 0.9 }}>
-            <Input
-              placeholder="Nombre de la lista"
-              autoCapitalize="none"
-              onChangeText={(text) => this.handleChange("name", text)}
-              style={{ marginTop: 15 }}
-            />
-            <Checkbox
-              color="#666"
-              initialValue={true}
-              label="Lista privada"
-              iconFamily="font-awesome"
-              iconName="lock"
-              onChange={(value) => this.handleChange("private", value)}
-              style={{ marginTop: 5, alignSelf: "flex-end" }}
-            />
-            <View
-              style={{
-                marginTop: 15,
-                width: width * 0.9,
-                backgroundColor: "white",
-                borderColor: "gray",
-                borderWidth: 1,
-                borderRadius: 5,
-                paddingBottom: 5,
-                paddingLeft: 5,
-              }}
-            >
-              <SectionedMultiSelect
-                items={this.state.allUsers}
-                uniqueKey="id"
-                subKey="children"
-                selectText="Usuarios autorizados"
-                searchPlaceholderText="Buscar"
-                selectedText="seleccionados"
-                showDropDowns={false}
-                expandDropDowns={true}
-                readOnlyHeadings={true}
-                onSelectedItemsChange={this.onSelectedUsersChange}
-                selectedItems={selectedUsers}
-              />
+        {isLoading && <Text>Cargando datos..</Text>}
+        {!isLoading && (
+          <KeyboardAvoidingView behavior="height" enabled>
+            <View style={{ width: width * 0.9, marginTop: 20 }}>
+              <Text muted>
+                Crea una lista para tener todas tus peliculas en un lugar
+              </Text>
             </View>
-            <View
-              style={{
-                marginTop: 15,
-                width: width * 0.9,
-                backgroundColor: "white",
-                borderColor: "gray",
-                borderWidth: 1,
-                borderRadius: 5,
-                paddingBottom: 5,
-                paddingLeft: 5,
-              }}
-            >
-              <SectionedMultiSelect
-                items={this.state.allMovies}
-                uniqueKey="id"
-                subKey="children"
-                selectText="Peliculas deseadas"
-                searchPlaceholderText="Buscar"
-                selectedText="seleccionadas"
-                showDropDowns={false}
-                expandDropDowns={true}
-                readOnlyHeadings={true}
-                onSelectedItemsChange={this.onselectedMoviesChange}
-                selectedItems={selectedMovies}
+            <View flex={4} style={{ width: width * 0.9 }}>
+              <Input
+                placeholder="Nombre de la lista"
+                value={this.state.name}
+                autoCapitalize="none"
+                onChangeText={(text) => this.handleChange("name", text)}
+                style={{ marginTop: 15 }}
               />
+              <Checkbox
+                color="#666"
+                initialValue={this.state.private}
+                label="Lista privada"
+                iconFamily="font-awesome"
+                iconName="lock"
+                onChange={(value) => this.handleChange("private", value)}
+                style={{ marginTop: 5, alignSelf: "flex-end" }}
+              />
+              <View
+                style={{
+                  marginTop: 15,
+                  width: width * 0.9,
+                  backgroundColor: "white",
+                  borderColor: "gray",
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingBottom: 5,
+                  paddingLeft: 5,
+                }}
+              >
+                <SectionedMultiSelect
+                  items={this.state.allUsers}
+                  loading={isLoading}
+                  uniqueKey="id"
+                  subKey="users"
+                  selectText="Usuarios autorizados"
+                  searchPlaceholderText="Buscar"
+                  selectedText="seleccionados"
+                  showDropDowns={false}
+                  expandDropDowns={true}
+                  readOnlyHeadings={true}
+                  onSelectedItemsChange={this.onSelectedUsersChange}
+                  selectedItems={this.state.selectedUsers}
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 15,
+                  width: width * 0.9,
+                  backgroundColor: "white",
+                  borderColor: "gray",
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingBottom: 5,
+                  paddingLeft: 5,
+                }}
+              >
+                <SectionedMultiSelect
+                  items={this.state.allMovies}
+                  loading={isLoading}
+                  uniqueKey="id"
+                  subKey="movies"
+                  selectText="Peliculas deseadas"
+                  searchPlaceholderText="Buscar"
+                  selectedText="seleccionadas"
+                  showDropDowns={false}
+                  expandDropDowns={true}
+                  readOnlyHeadings={true}
+                  onSelectedItemsChange={this.onselectedMoviesChange}
+                  selectedItems={this.state.selectedMovies}
+                />
+              </View>
+              {/* Work around because previous selected movies could not be
+               present on the list of all movies that we get now */}
+              <View style={{ padding: 5 }}>
+                <Text>Peliculas previas: </Text>
+                {previousMovies.map((movie) => (
+                  <Block
+                    key={`movie-${movie.id}`}
+                    styles={{ backgroundColor: "white" }}
+                  >
+                    <Text style={{ margin: 5 }}>
+                      {movie.name}{" "}
+                      <Icon
+                        name="trash-o"
+                        family="font-awesome"
+                        color={theme.COLORS.ERROR}
+                        size={theme.SIZES.FONT * 0.8}
+                        onPress={() => this.removePrevMovies(movie.id)}
+                      />
+                    </Text>
+                  </Block>
+                ))}
+              </View>
             </View>
-          </View>
-          <View flex={1} style={{ width: width * 0.9 }}>
-            <Button color="error" onPress={this.handleCreation.bind(this)}>
-              Crear lista
-            </Button>
-          </View>
-        </KeyboardAvoidingView>
+            <View flex={1} style={{ width: width * 0.9 }}>
+              <Button color="error" onPress={this.handleCreation.bind(this)}>
+                Crear lista
+              </Button>
+            </View>
+          </KeyboardAvoidingView>
+        )}
       </Block>
     );
   }

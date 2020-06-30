@@ -91,7 +91,7 @@ export const getMovies = async function () {
     let apiResponse = await result.json();
     estrenos = estrenos.concat(apiResponse.results);
   }
-  console.log("-----got", estrenos.length);
+  console.log("-----got movies", estrenos.length);
 
   let estrenosResponse = estrenos.map((movie) => ({
     name: movie.title,
@@ -99,4 +99,21 @@ export const getMovies = async function () {
   }));
 
   return estrenosResponse;
+};
+
+export const getAmovie = async function (movieId) {
+  const apiKEY = "af158ebf42ce4f8e554bcd0ba82df8dc";
+  const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKEY}`;
+  let result = await fetch(url);
+  let apiResponse = await result.json();
+  console.log("-----got a movie", apiResponse);
+
+  const { title, id } = apiResponse;
+
+  let movieResponse = {
+    name: title,
+    id: id,
+  };
+
+  return movieResponse;
 };
