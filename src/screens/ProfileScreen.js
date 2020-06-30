@@ -249,13 +249,13 @@ export default class Profile extends Component {
         </View>
 
         {/* Change pw and cahge generes favorites buttons */}
-        <View style={styles.generosFavoritos}>
+        {/* <View style={styles.generosFavoritos}>
           <Button
             buttonStyle={styles.generosFavoritos}
             onPress={this.goToBack.bind(this)}
             title="Volver"
           />
-        </View>
+        </View> */}
 
         <Image
           source={require("../../assets/loadingIcon.png")}
