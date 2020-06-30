@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,  Fragment , useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,170 +12,360 @@ import {
 import { ListItem, Rating } from 'react-native-elements'
 //import Config from '../constants/Config';
 //import Loader from '../components/Loader';
-import moment from 'moment';
+//import moment from 'moment';
+import listGeneres from '../components/ListGeneres';
+import ChangePassword from './ChangePassword';
+import { insertComment } from '../controllers/CommentsController';
+import ListGeneres from '../components/ListGeneres';
+
+
+
 
 
 export default class Profile extends Component {
+
+ 
 
     constructor(props){
         super(props);
         this.state = {
             userId: "",
-            userName: "",
-            userEmail: "",
             userToken: "",
-            user: {},
-            comentario: "Mis Géneros Favoritos :",
+           // user: {},
+            comentario: "Mis Géneros Favoritos 3 :",
             movies: null,
             loading: false,
             showChangePw: "",
             newPw: "",
-            modalVisible: false
+            modalVisible: false,
+            generos : [],
+            genprueba:[]
+            //listGeneres1: listGeneres
+            
+
         }
 
-        this.fetchData = this.fetchData.bind(this)
+        
+        
     }
+    
+    
 
-    /*
-    static navigationOptions = ({ navigation }) => {
-      return {
-        title: `My Profile`,
-        headerStyle: {
-          backgroundColor: '#0099ff',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        }
-      };
-    };
-*/
     componentDidMount(){
-        this.getData(this.fetchData);
-    }
+      this.checkUserSignedIn();
+  }
+  
+
+
+checkUserSignedIn = async () =>{
+  try {
+      let value = await AsyncStorage.getItem("@user");
+      
+      console.log("USER DATA: " + value);
+      if (value != null){
+          console.log("LOGGED IN ");
+          let data = JSON.parse(value);
+          console.log("LOGGED IN a ");
+          this.setState({genids1: data.genreIds});
+
+          
+          console.log("LOGGED IN b ");
+          
+         this.setState({userEmail: data.email});
+         this.setState({userName: data.fullName});
+                 }
+      else {
+          console.log("NOT LOGGED IN");
+          setLoginGen("No Logueado");
+          
+      }
+  } catch (error) {
+      console.log(error);
+      console.log("ERROR GETTING USER DATA");
+  }
+}
+
+
+lapsList(genids1){
+  if (listGeneres){
+    console.log(this.state.genids1);
     
-    _onRefresh = () => {//Get comments again when refreshing page.
-      this.setState({refreshing: true});
-      this.getData(this.fetchData).then(() => {
-        this.setState({refreshing: false});
-      });
-    }
+    return( this.state.genids1.map((elem,i) =>{
+      return(
+        
+      <View style={styles.btnStyle}
+      key={i.toString()}> 
+        <Text>{elem}</Text>
+        </View>)
+    }))
 
 
-    getData = async (cb) => { //Get user token for security and call fetchData as callback.
-        const storageValue = await AsyncStorage.getItem('@user');
-        const storageValueJson = JSON.parse(storageValue);
-        if(storageValue !== null) {
-          this.setState({
-              userId: storageValueJson.id,
-              userName: storageValueJson.name,
-              userEmail: storageValueJson.email,
-              userToken: storageValueJson.token,
-              user: storageValueJson
-            }, cb)
+
+
+  }
+  else{
+     
+    <View style={styles.btnStyle}>
+      <Text style={styles.name}>NO hay generos favoritos</Text>
+      
+    </View>
+   
+
+
+
+  }
+}
+  
+parseData(){
+   
+  if (this.state.genids1){
+    console.log(this.state.genids1);
+    
+    return( this.state.genids1.map((elem,i) =>{
+      return(
+        
+      <View style={styles.btnStyle}
+      key={i.toString()}> 
+        <Text>{elem}</Text>
+        </View>)
+    }))
+
+
+
+
+  }
+  else{
+     
+    <View style={styles.btnStyle}>
+      <Text style={styles.name}>NO hay generos favoritos</Text>
+      
+    </View>
+   
+
+
+
+  }
+}
+  
+
+parseData1(){
+   
+  if (this.state.genids1){
+      console.log(this.state.genids1);
+    
+      return(this.state.genids1.map((elem,i) =>{
+
+      switch (elem) {
+        case 28: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Ciencia" }</Text>
+              </View>);
         }
+        case 16: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 99: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Documental" }</Text>
+              </View>);
+        }
+        case 18: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Drama" }</Text>
+              </View>);
+        }
+        case 10751: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Familiar" }</Text>
+              </View>);
+        }
+        case 14: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Fantasia" }</Text>
+              </View>);
+        }
+        case 36: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Historia" }</Text>
+              </View>);
+        }
+        case 35: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 10402: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 9648: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 10749: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 9648: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 10749: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 878: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 27: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 10770: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Animación" }</Text>
+              </View>);
+        }
+        case 53: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Terror" }</Text>
+              </View>);
+        }
+        case 37: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Terror" }</Text>
+              </View>);
+        }
+        case 12: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Terror" }</Text>
+              </View>);
+        }
+
+        case 80: {
+          return(      
+        
+            <View style={styles.generosFavoritos}
+            key={i.toString()}> 
+              <Text style={styles.generosFavoritos}>{"Crimen" }</Text>
+              </View>);
+        }
+
+        default: {
+          return(
+          <View style={styles.generosFavoritos}
+          key={i.toString()}> 
+            <Text style={styles.generosFavoritos}>{"Otro" }</Text>
+            </View>);
+        }
+      }
+    }))
+      
+  }
+
+  else{
+     
+    <View style={styles.btnStyle}>
+      <Text style={styles.name}>NO hay generos favoritos</Text>
+      
+    </View>
+   
+
+
+
+  }
+}
+  
+
+  
+
+   
+   
+    goTochange(){
+      this.props.navigation.navigate('UpdateUserScreen');
     }
 
-    fetchData(){ // Fetch comments done by user logged.
-        this.setState({loading: true});
-        const endpoint_back_movies = `${Config.api_url}/getCommentsbyField`;
-        fetch(endpoint_back_movies,
-            {
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${this.state.userToken}`
-                }
-            }
-        ).then(
-            (response) => {
-                return response.json();
-            }
-        ).then(responseDataBack => {
-            const results = responseDataBack.comments;
-            var movies = [];
-
-            let movies_titles = Object.keys(results);
-
-                movies_titles.forEach(movie_title => {
-                    let movie_comments = results[movie_title]
-                    const movieComment =(
-                    <View key={movie_title} style={{margin:10}}>
-                        <Text 
-                            style={{fontWeight:"bold", fontSize:18, color: "#00BFFF", textDecorationLine: 'underline'}}
-                            
-                        >
-                            {movie_title}
-                        </Text>
-                        {movie_comments.map(item => <ListItem
-                            key={item.id}
-                            title={item.comment}
-                            subtitle={moment(item.date).fromNow()}
-                            rightAvatar = {<Rating startingValue={item.stars} imageSize={12} readonly/>}
-                        /> )   }
-                    </View>)
-
-                    movies.push(movieComment);
-                })                 
-
-            this.setState({movies: movies, loading:false});
-       });
-    } 
-
-    goTochangePw(){
-      this.props.navigation.navigate('ChangePassword', {user: this.state.user});
-    }
-
-    goTochangeGeners(){
+    goToBack(){
       this.props.navigation.navigate('HomeScreen');
     }
 
-    goToMyList(){
-      this.props.navigation.navigate('HomeScreen');
-    }
-
-    
+        
 
 
   render() {
     
-   // let no_img = require ("../assets/images/icon.png");
-    //let data = this.state.user.full_contact_data;
-
-    /*return (
-      /*Nuevo */ 
       const { navigation } = this.props; 
+      const { genids1 ,userName, userEmail } = this.state;
+    
     return (
-      /*
-      <Block safe flex>
-        <NavBar
-          title="Galio Components"
-          right={(
-            <Button
-              onlyIcon
-              icon="heart"
-              iconFamily="font-awesome"
-              iconSize={theme.SIZES.BASE}
-              iconColor={theme.COLORS.ICON}
-              color="transparent"
-              onPress={() => Linking.openURL('https://galio.io')}
-            />
-          )}
-          left={(
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Icon 
-                name="menu"
-                family="feather"
-                size={theme.SIZES.BASE}
-                color={theme.COLORS.ICON}
-              />
-            </TouchableOpacity>
-          )}
-          style={Platform.OS === 'android' ? { marginTop: theme.SIZES.BASE } : null}
-        />
-        </Block> 
-
-       Fin */
+     
       <ScrollView 
           style={styles.container}
           refreshControl={
@@ -186,43 +376,62 @@ export default class Profile extends Component {
         }
         > 
       
-        <View style={styles.body}>
-          <View style={styles.bodyContent}>
-            <Text style={styles.name}>{this.state.user.name}</Text>
-            <Text style={styles.email}>{this.state.user.email}</Text>
-          </View>
+      
+        <View style={styles.nombreRow}>
+            <Text style={styles.nombre}>Nombre:</Text>         
+            <Text style={styles.loremIpsum3}>{this.state.userName}</Text>
+           
+           
         </View>
+
+        <View style={styles.emailRow}>
+          <Text style={styles.email}>Email:</Text>
+          <Text style={styles.loremIpsum5}>{this.state.userEmail}</Text>
+       </View>
         
-        <Text style={{fontWeight:"bold", fontSize:16, marginLeft:5, marginBottom:10}}>{this.state.comentario}</Text>
-        <View>{this.state.movies}</View> 
+            
 
-        {/* Change pw and cahge generes favorites buttons */}
-        <View style={{marginBottom:20}}>
-          <Button
-            backgroundColor='#03A9F4'
-            buttonStyle={{marginBottom: 10}}
-            onPress={this.goTochangePw.bind(this)}
-            title='Cambiar Contraseña'
-          />
-        </View>
-        <View style={{marginBottom:20}}>
-          <Button
-            backgroundColor='#03A9F4'
-            buttonStyle={{ marginBottom: 10}}
-            onPress={this.goTochangeGeners.bind(this)}
-            title='Modificar géneros favoritos'
-           />
-        </View>
+       <View style={styles.emailRow}>
+          <Text style={styles.generosFavoritos}>Géneros Favoritos:</Text>
+                  
+       </View>
 
-        <View style={{marginBottom:20}}>
-          <Button
-            backgroundColor='#03A9F4'
-            buttonStyle={{ marginBottom: 10}}
-            onPress={this.goToMyList.bind(this)}
-            title='Ver mis listas '
-           />
+       <View style={styles.generosFavoritos}>
+           {this.parseData1()}
+         
+       </View>
+      
+       
+       <View style={styles.container}>
+        <View style={styles.materialButtonViolet}>
+            <Button
+                title="Configuraciones"
+                buttonStyle={styles.btnStyle}
+                onPress={this.goTochange.bind(this)}
+            />
+        </View>
         </View>
        
+
+        {/* Change pw and cahge generes favorites buttons */}
+        <View style={styles.generosFavoritos}>
+          <Button
+            
+            buttonStyle={styles.generosFavoritos}
+            onPress={this.goToBack.bind(this)}
+            title='Volver'
+          />
+        </View>
+
+     
+        
+      
+      <Image
+        source={require("../../assets/loadingIcon.png")}
+        resizeMode="contain"
+        style={styles.image}
+      ></Image>
+    
       </ScrollView>
     );
   }
@@ -230,56 +439,76 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        flex: 1,
+        backgroundColor: "rgba(4,80,168,1)"
     },
-  header:{
-    backgroundColor: "#0099ff",
-    height:65,
+    
+  
+
+
+ 
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 80,
+    marginLeft: 87
   },
-  avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 53,
-    borderWidth: 4,
-    borderColor: "white",
-    marginBottom:5,
-    alignSelf:'center',
-    position: 'absolute',
-    marginTop:30
+  loremIpsum5: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 17,
+    marginLeft: 12
   },
-  name:{
-    fontSize:22,
-    color:"#FFFFFF",
-    fontWeight:'600',
+  emailRow: {
+    height: 20,
+    flexDirection: "row",
+    marginTop: 50,
+    marginLeft: 61,
+    marginRight: 50,
+    marginBottom:20
   },
-  body:{
-    marginTop:20,
+  btnStyle: {
+    marginTop: 10,
+    justifyContent: "center",
+    height: 60,
   },
-  bodyContent: {
-    flex: 1,
-    alignItems: 'center',
-    padding:30,
+  nombre: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 17
   },
-  name:{
-    fontSize:28,
-    color: "#696969",
-    fontWeight: "600"
+  loremIpsum: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 18,
+    marginTop: -270,
+    marginLeft: 37
   },
-  info:{
-    fontSize:16,
-    color: "#00BFFF",
-    marginTop:10
+  loremIpsum3: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 17,
+    marginLeft: 12
   },
-  email:{
-    fontSize:16,
-    color: "#00BFFF",
-    marginTop:10,
-    textDecorationLine: 'underline'
+  nombreRow: {
+    height: 20,
+    flexDirection: "row",
+    marginTop: 55,
+    marginLeft: 61,
+    marginRight: 138
   },
-  description:{
-    fontSize:16,
-    color: "#696969",
-    marginTop:10,
-    textAlign: 'center'
-  }
+  email: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 17
+  },
+  generosFavoritos: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 17,
+    marginLeft: 12
+  },
+  generosFavoritosRow: {
+    height: 20,
+    flexDirection: "row",
+    marginTop: 50,
+    marginLeft: 61,
+    marginRight: 50,
+    marginBottom:20
+  },
+ 
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, View, Text, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 
 const MenuDrawerStructure = (props) => {
   const toggleDrawer = () => {
