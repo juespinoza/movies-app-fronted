@@ -1,4 +1,5 @@
 const URL = "https://movie-distribuidas-back.herokuapp.com";
+//const URL = "http://s1.ebrainte.com:47000";
 
 export const getAllLists = async () => {
   const endpoint = `${URL}/api/getPublicMovieLists`;
@@ -144,4 +145,3 @@ export const updateMovieList = async (data) => {
     return { rdo: 1, mensaje: error };
   }
 };
-

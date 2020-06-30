@@ -13,7 +13,6 @@ export default function MovieListsScreen(props) {
   const [routes] = React.useState([
     { key: "first", title: "Públicas" },
     { key: "second", title: "Privadas" },
-    { key: "third", title: "Propias" },
   ]);
 
   const renderScene = ({ route }) => {
@@ -22,8 +21,6 @@ export default function MovieListsScreen(props) {
         return <PublicListsScreen navigation={props.navigation} />;
       case "second":
         return <FollowingListsScreen navigation={props.navigation} />;
-      case "third":
-        return <MyListsScreen navigation={props.navigation} />;
       default:
         return null;
     }
