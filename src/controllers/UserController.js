@@ -59,12 +59,10 @@ export const login = async (data) => {
   }
 };
 
-
-
-export const update = async () => {
+export const update = async (data) => {
   const endpoint = `${URL}/user/update`;
   const options = {
-    method: "PATCH",
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   };

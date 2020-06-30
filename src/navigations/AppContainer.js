@@ -63,8 +63,8 @@ function AppContainer() {
       let value = await AsyncStorage.getItem("@user");
       //console.log("USER DATA IN MENU: " + value);
       if (value != null) {
-        console.log("LOGGED IN");
-        console.log(isLoggedIn);
+        //console.log("LOGGED IN");
+        //console.log(isLoggedIn);
         setIsLoggedIn(true);
       } else {
         //console.log("NOT LOGGED IN IN MENU");
@@ -100,21 +100,32 @@ function AppContainer() {
               component={loginScreen}
             />
           )}
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="ProfileScreen"
+              options={{ drawerLabel: "Perfil" }}
+              component={profileScreen}
+            />
+          )}
           <Drawer.Screen
             name="Lists"
             options={{ drawerLabel: "Ver listas de pelis" }}
             component={movieListsScreen}
           />
-          <Drawer.Screen
-            name="Createlists"
-            options={{ drawerLabel: "Crear Lista de pelis" }}
-            component={createListsScreen}
-          />
-          <Drawer.Screen
-            name="Managelists"
-            options={{ drawerLabel: "Adminitrar Lista de pelis" }}
-            component={manageListsScreen}
-          />
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="Managelists"
+              options={{ drawerLabel: "Adminitrar Lista de pelis" }}
+              component={manageListsScreen}
+            />
+          )}
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="Createlists"
+              options={{ drawerLabel: "Crear Lista de pelis" }}
+              component={createListsScreen}
+            />
+          )}
           {!isLoggedIn && (
             <Drawer.Screen
               name="RegisterScreen"
@@ -127,20 +138,6 @@ function AppContainer() {
               name="LogoutScreen"
               options={{ drawerLabel: "Cerrar Sesion" }}
               component={logoutScreen}
-            />
-          )}
-          {isLoggedIn && (
-            <Drawer.Screen
-              name="ProfileScreen"
-              options={{ drawerLabel: "Perfil" }}
-              component={profileScreen}
-            />
-          )}
-          {isLoggedIn && (
-            <Drawer.Screen
-              name="UpdateUserScreen"
-              options={{ drawerLabel: "Configuración" }}
-              component={updateUserScreen}
             />
           )}
         </Drawer.Navigator>

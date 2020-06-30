@@ -47,13 +47,17 @@ export default class FollowingListsScreen extends React.PureComponent {
   getMovies = async () => {
     try {
       const currentUser = await this.getCurrentUserData();
-      if (this._isMounted) {
+      if (
+        this._isMounted &&
+        (currentUser != "undefined" || currentUser != null)
+      ) {
         const { email } = this.state.currentUser;
         const ownerData = { email };
         let response = await getFollowingLists(ownerData);
         if (this._isMounted && response.rdo == 0) {
           this.setState({ movieLists: response.data, isLoading: false });
         }
+      } else {
       }
     } catch (error) {
       console.error("Error en get following lists: ", error);
@@ -70,7 +74,7 @@ export default class FollowingListsScreen extends React.PureComponent {
           shadowColor={theme.COLORS.BLACK}
           style={styles.author}
           title={item.name}
-          caption={item.owner}
+          caption={`${item.owner.slice(0, 16)}...`}
           avatar="http://lorempixel.com/80/80/abstract/" //"https://picsum.photos/80"
           location={
             <Block row>
