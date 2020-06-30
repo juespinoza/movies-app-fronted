@@ -17,11 +17,12 @@ import { ListItem, Rating } from "react-native-elements";
 //import moment from 'moment';
 import listGeneres from "../components/ListGeneres";
 //import ChangePassword from '../ChangePassword';
-import { insertComment } from "../controllers/CommentsController";
+import { update } from "../controllers/UserController";
 import ListGeneres from "../components/ListGeneres";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { GENRES } from "./shared/genres";
 import { SaveItem, ReadItem } from "../screens/shared/storage";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const items = GENRES;
 
@@ -100,7 +101,7 @@ export default class Profile extends Component {
         this.editForm("@selectedGenres");
 
         // console.log("LOGGED IN b ");
-
+        this.setState({ userPassword: data.password });
         this.setState({ userEmail: data.email });
         this.setState({ userName: data.fullName });
       } else {
@@ -148,6 +149,37 @@ export default class Profile extends Component {
       </View>;
     }
   }
+
+  saveGeneros = () => {
+    const { selectedItems, userName, userEmail, userPassword } = this.state;
+    const data = {
+      fullName: userName,
+      email: userEmail,
+      password: userPassword,
+      genreIds: GENRES[0].generos
+        .filter((genero) => selectedItems.includes(genero.name))
+        .map((genero) => genero.id),
+    };
+    this.sendUpdate(data);
+  };
+
+  sendUpdate = async (data) => {
+    const response = await update(data);
+
+    if (response.rdo === 0) {
+      console.log("Guardado");
+      showMessage({
+        message: "generos actualizados!",
+        type: "info",
+      });
+    } else {
+      console.log("No Guardado");
+      showMessage({
+        message: "hubo un error!",
+        type: "error",
+      });
+    }
+  };
 
   goTochange() {
     this.props.navigation.navigate("UpdateUserScreen");
@@ -209,9 +241,9 @@ export default class Profile extends Component {
         <View style={styles.container}>
           <View style={styles.materialButtonViolet}>
             <Button
-              title="Configuraciones"
+              title="Guardar géneros"
               buttonStyle={styles.btnStyle}
-              onPress={this.goTochange.bind(this)}
+              onPress={() => this.saveGeneros()}
             />
           </View>
         </View>
