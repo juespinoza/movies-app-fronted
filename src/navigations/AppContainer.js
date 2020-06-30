@@ -93,12 +93,6 @@ function AppContainer() {
             options={{ drawerLabel: "Buscar Pelis" }}
             component={homeScreen}
           />
-
-          <Drawer.Screen
-            name="Movie Lists"
-            options={{ drawerLabel: "Listas de películas" }}
-            component={movieListsScreen}
-          />
           {!isLoggedIn && (
             <Drawer.Screen
               name="LoginScreen"
