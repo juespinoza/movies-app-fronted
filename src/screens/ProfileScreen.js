@@ -8,6 +8,8 @@ import {
   Button,
   ScrollView,
   RefreshControl,
+  Input,
+  Dimensions,
 } from "react-native";
 import { ListItem, Rating } from "react-native-elements";
 //import Config from '../constants/Config';
@@ -17,6 +19,13 @@ import listGeneres from "../components/ListGeneres";
 //import ChangePassword from '../ChangePassword';
 import { insertComment } from "../controllers/CommentsController";
 import ListGeneres from "../components/ListGeneres";
+import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import { GENRES } from "./shared/genres";
+import { SaveItem, ReadItem } from "../screens/shared/storage";
+
+const items = GENRES;
+
+const { width } = Dimensions.get("window");
 
 export default class Profile extends Component {
   constructor(props) {
@@ -33,6 +42,8 @@ export default class Profile extends Component {
       modalVisible: false,
       generos: [],
       genprueba: [],
+      selectedItems: [],
+      isLoading: true,
       //listGeneres1: listGeneres
     };
   }
@@ -41,23 +52,59 @@ export default class Profile extends Component {
     this.checkUserSignedIn();
   }
 
+  onSelectedItemsChange = (selectedItems) => {
+    this.setState({ selectedItems });
+  };
+
+  handleChange = (name, value) => {
+    this.setState({ [name]: value });
+  };
+
+  // get items for a form
+  editForm = (key) => {
+    ReadItem(key).then((result) => {
+      const selected = JSON.parse(result);
+      console.log("selectd items", selected);
+      this.setState({
+        selectedItems: selected,
+        isLoading: false,
+      });
+    });
+  };
+
+  // save form data using each forms name
+  saveItems = (key, value) => {
+    const items = JSON.stringify(value);
+
+    SaveItem(key, items)
+      .then((res) => {
+        console.info(`storaged on ${key}`);
+      })
+      .catch((e) => console.warn(e));
+  };
+
   checkUserSignedIn = async () => {
     try {
       let value = await AsyncStorage.getItem("@user");
 
       console.log("USER DATA: " + value);
       if (value != null) {
-        console.log("LOGGED IN ");
+        // console.log("LOGGED IN ");
         let data = JSON.parse(value);
-        console.log("LOGGED IN a ");
+        // console.log("LOGGED IN a ");
         this.setState({ genids1: data.genreIds });
+        const selectedItems = GENRES[0].generos
+          .filter((genero) => data.genreIds.includes(genero.id))
+          .map((movie) => movie.name);
+        this.saveItems("@selectedGenres", selectedItems);
+        this.editForm("@selectedGenres");
 
-        console.log("LOGGED IN b ");
+        // console.log("LOGGED IN b ");
 
         this.setState({ userEmail: data.email });
         this.setState({ userName: data.fullName });
       } else {
-        console.log("NOT LOGGED IN");
+        // console.log("NOT LOGGED IN");
         setLoginGen("No Logueado");
       }
     } catch (error) {
@@ -102,170 +149,6 @@ export default class Profile extends Component {
     }
   }
 
-  parseData1() {
-    if (this.state.genids1) {
-      console.log(this.state.genids1);
-
-      return this.state.genids1.map((elem, i) => {
-        switch (elem) {
-          case 28: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Ciencia"}</Text>
-              </View>
-            );
-          }
-          case 16: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 99: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Documental"}</Text>
-              </View>
-            );
-          }
-          case 18: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Drama"}</Text>
-              </View>
-            );
-          }
-          case 10751: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Familiar"}</Text>
-              </View>
-            );
-          }
-          case 14: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Fantasia"}</Text>
-              </View>
-            );
-          }
-          case 36: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Historia"}</Text>
-              </View>
-            );
-          }
-          case 35: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 10402: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 9648: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 10749: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 9648: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 10749: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 878: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 27: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 10770: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Animación"}</Text>
-              </View>
-            );
-          }
-          case 53: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Terror"}</Text>
-              </View>
-            );
-          }
-          case 37: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Terror"}</Text>
-              </View>
-            );
-          }
-          case 12: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Terror"}</Text>
-              </View>
-            );
-          }
-
-          case 80: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Crimen"}</Text>
-              </View>
-            );
-          }
-
-          default: {
-            return (
-              <View style={styles.generosFavoritos} key={i.toString()}>
-                <Text style={styles.generosFavoritos}>{"Otro"}</Text>
-              </View>
-            );
-          }
-        }
-      });
-    } else {
-      <View style={styles.btnStyle}>
-        <Text style={styles.name}>NO hay generos favoritos</Text>
-      </View>;
-    }
-  }
-
   goTochange() {
     this.props.navigation.navigate("UpdateUserScreen");
   }
@@ -276,7 +159,7 @@ export default class Profile extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { genids1, userName, userEmail } = this.state;
+    const { genids1, userName, userEmail, isLoading } = this.state;
 
     return (
       <ScrollView
@@ -301,8 +184,27 @@ export default class Profile extends Component {
         <View style={styles.emailRow}>
           <Text style={styles.generosFavoritos}>Géneros Favoritos:</Text>
         </View>
-
-        <View style={styles.generosFavoritos}>{this.parseData1()}</View>
+        <View
+          style={{
+            backgroundColor: "white",
+            marginBottom: 20,
+          }}
+        >
+          <SectionedMultiSelect
+            items={items}
+            loading={isLoading}
+            uniqueKey="name"
+            subKey="generos"
+            selectText="Géneros"
+            searchPlaceholderText="Buscar"
+            selectedText="seleccionados"
+            showDropDowns={false}
+            expandDropDowns={true}
+            readOnlyHeadings={true}
+            onSelectedItemsChange={this.onSelectedItemsChange}
+            selectedItems={this.state.selectedItems}
+          />
+        </View>
 
         <View style={styles.container}>
           <View style={styles.materialButtonViolet}>
