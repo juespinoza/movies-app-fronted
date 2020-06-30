@@ -46,7 +46,7 @@ class LoginScreen extends React.Component {
       showMessage({
         message: "Iniciaste sesion exitosamente!",
         type: "success",
-      })
+      });
       this.props.navigation.navigate("Home", {
         flashMessage: response.message,
       });

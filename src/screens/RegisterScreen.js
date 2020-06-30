@@ -142,7 +142,7 @@ class RegisterScreen extends React.Component {
                 color="error"
                 onPress={() => this.handleRegistration.bind(this)}
               >
-                Sign up
+                Registrarse
               </Button>
               <Button
                 color="transparent"
@@ -154,7 +154,7 @@ class RegisterScreen extends React.Component {
                   color={theme.COLORS.ERROR}
                   size={theme.SIZES.FONT * 0.75}
                 >
-                  ¿Ya tienes una cuenta? Sign In
+                  ¿Ya tienes una cuenta? Inicia sesión
                 </Text>
               </Button>
             </Block>
