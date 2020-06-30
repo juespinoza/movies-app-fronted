@@ -8,6 +8,8 @@ import LoginScreen from "../screens/LoginScreen";
 import LogoutScreen from "../screens/LogoutScreen";
 import MovieListsScreen from "../screens/MovieListsScreen";
 import CreateListsScreen from "../screens/CreateListScreen";
+import ManageListsScreen from "../screens/ManageListsScreen";
+import EditListScreen from "../screens/EditListScreen";
 
 const Stack = createStackNavigator();
 
@@ -159,6 +161,38 @@ export const createListsScreen = ({ navigation }) => {
           headerLeft: () => (
             <MenuDrawerStructure navigationProps={navigation} />
           ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const manageListsScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Managelists"
+        component={ManageListsScreen}
+        options={{
+          title: "Administrar mis listas de Pelis", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
+        }}
+      />
+      <Stack.Screen
+        name="EditList"
+        component={EditListScreen}
+        options={{
+          title: "Edita tu lista", //Set Header Title
           headerStyle: {
             backgroundColor: "#cfcba7", //Set Header color
           },
