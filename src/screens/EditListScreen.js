@@ -19,7 +19,7 @@ import {
   Checkbox,
   Input,
 } from "galio-framework";
-import { createMovieList } from "../controllers/MovieListController";
+import { updateMovieList } from "../controllers/MovieListController";
 import theme from "../theme";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { getMovies, getAmovie } from "../controllers/TmdbController";
@@ -194,7 +194,7 @@ export default class EditListScreen extends React.PureComponent {
       movies,
     };
     console.log("data to send", data);
-    //this.createMovieList(data);
+    this.updateMovieList(data);
   };
 
   validateData = () => {
@@ -212,12 +212,12 @@ export default class EditListScreen extends React.PureComponent {
     return { isValid, message };
   };
 
-  createMovieList = async (listData) => {
+  updateMovieList = async (listData) => {
     try {
       if (this._isMounted) {
         const { isValid, message } = this.validateData();
         if (!isValid) {
-          let response = await createMovieList(listData);
+          let response = await updateMovieList(listData);
           if (response.rdo == 0) {
             this.setState({
               name: "",
@@ -226,12 +226,16 @@ export default class EditListScreen extends React.PureComponent {
               selectedUsers: [],
             });
             return Alert.alert(
-              "Lista creada!",
-              `El nombre de tu lista es: ${response.data.name}`,
+              "Lista editada",
+              `Ya puedes ver tus listas.`,
               [
                 {
-                  text: "OK",
+                  text: "Listas públicas",
                   onPress: () => this.props.navigation.navigate("Lists"),
+                },
+                {
+                  text: "Mis listas",
+                  onPress: () => this.props.navigation.goBack(),
                 },
               ],
               { cancelable: false }
@@ -366,7 +370,7 @@ export default class EditListScreen extends React.PureComponent {
             </View>
             <View flex={1} style={{ width: width * 0.9 }}>
               <Button color="error" onPress={this.handleCreation.bind(this)}>
-                Crear lista
+                Editar
               </Button>
             </View>
           </KeyboardAvoidingView>

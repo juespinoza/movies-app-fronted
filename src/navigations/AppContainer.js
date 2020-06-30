@@ -107,7 +107,7 @@ function AppContainer() {
           component={createListsScreen}
         />
         <Drawer.Screen
-          name="Manageelists"
+          name="Managelists"
           options={{ drawerLabel: "Adminitrar Lista de pelis" }}
           component={manageListsScreen}
         />

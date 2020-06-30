@@ -103,12 +103,7 @@ export default class ManageListsScreen extends React.PureComponent {
         }}
       >
         <View style={{ width: width * 0.8, marginTop: 10 }}>
-          <TouchableOpacity
-            style={{ marginTop: 10 }}
-            onPress={() =>
-              this.props.navigation.navigate("EditList", { list: item })
-            }
-          >
+          <TouchableOpacity style={{ marginTop: 10 }}>
             <Card
               flex
               center
@@ -164,12 +159,14 @@ export default class ManageListsScreen extends React.PureComponent {
         <View style={{ width: width * 0.2, marginTop: 20 }}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
-            onPress={() => console.log(item._id)}
+            onPress={() =>
+              this.props.navigation.navigate("EditList", { list: item })
+            }
           >
             <Icon
-              name="trash-o"
+              name="edit"
               family="font-awesome"
-              color={theme.COLORS.ERROR}
+              color={theme.COLORS.FACEBOOK}
               size={theme.SIZES.FONT * 2}
             />
           </TouchableOpacity>
