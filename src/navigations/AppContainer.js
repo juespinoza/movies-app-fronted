@@ -61,13 +61,13 @@ function AppContainer() {
   checkUserSignedIn2 = async () => {
     try {
       let value = await AsyncStorage.getItem("@user");
-      console.log("USER DATA IN MENU: " + value);
+      //console.log("USER DATA IN MENU: " + value);
       if (value != null) {
         console.log("LOGGED IN");
         console.log(isLoggedIn);
         setIsLoggedIn(true);
       } else {
-        console.log("NOT LOGGED IN IN MENU");
+        //console.log("NOT LOGGED IN IN MENU");
         setIsLoggedIn(false);
         console.log(isLoggedIn);
       }
