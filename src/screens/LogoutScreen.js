@@ -5,7 +5,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-
 function LogoutScreen(props) {
 
     const [loginName, setLoginName] = useState("");
@@ -48,6 +47,7 @@ function LogoutScreen(props) {
             flashMessage: "Sesion Cerrada con Exito!",
         });
      };
+
 
 
 

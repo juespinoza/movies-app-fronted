@@ -7,6 +7,8 @@ import RegisterScreen from "../screens/RegisterScreen";
 import LoginScreen from "../screens/LoginScreen";
 import LogoutScreen from "../screens/LogoutScreen";
 import MovieListsScreen from "../screens/MovieListsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import UpdateUserScreen from "../screens/UpdateUserScreen";
 import CreateListsScreen from "../screens/CreateListScreen";
 import ManageListsScreen from "../screens/ManageListsScreen";
 import EditListScreen from "../screens/EditListScreen";
@@ -171,6 +173,30 @@ export const createListsScreen = ({ navigation }) => {
   );
 };
 
+export const profileScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 export const manageListsScreen = ({ navigation }) => {
   return (
     <Stack.Navigator>
@@ -185,7 +211,10 @@ export const manageListsScreen = ({ navigation }) => {
           headerStyle: {
             backgroundColor: "#cfcba7", //Set Header color
           },
-          headerTintColor: "#333", //Set Header text color
+          headerTintColor: "#333", //Set Header text color            
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
         }}
       />
       <Stack.Screen
@@ -197,8 +226,37 @@ export const manageListsScreen = ({ navigation }) => {
             backgroundColor: "#cfcba7", //Set Header color
           },
           headerTintColor: "#333", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
         }}
       />
     </Stack.Navigator>
   );
 };
+
+
+export const updateUserScreen = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Update"
+        component={UpdateUserScreen}
+        options={{
+          title: "Configuración", //Set Header Title
+          headerLeft: () => (
+            <MenuDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: "#cfcba7", //Set Header color
+          },
+          headerTintColor: "#333", //Set Header text color            
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+

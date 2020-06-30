@@ -59,6 +59,37 @@ export const login = async (data) => {
   }
 };
 
+
+
+export const update = async () => {
+  const endpoint = `${URL}/user/update`;
+  const options = {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+  try {
+    let response = await fetch(endpoint, options);
+    let responseStatus = response.status;
+    let responseData = await response.json();
+    console.log(responseData);
+    switch (responseStatus) {
+      case 200: {
+        return { rdo: 0, mensaje: "OK", data: responseData.userData };
+      }
+      case 500: {
+        return { rdo: 1, mensaje: "Hubo un problema en el realizar el cambio" };
+      }
+      default: {
+        return { rdo: 1, mensaje: "Ha ocurrido un error" };
+      }
+    }
+  } catch (error) {
+    console.log("Error on PATCH /user/update", error);
+    return { rdo: 1, mensaje: error };
+  }
+};
+
 export const getUsers = async function () {
   const endpoint = `${URL}/user`;
   let result = await fetch(endpoint);

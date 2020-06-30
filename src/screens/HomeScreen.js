@@ -173,7 +173,6 @@ class HomeScreen extends React.Component {
 
     return (
       <>
-
       <View style={styles.modal}>
         <Modal
           visible={this.state.isModalVisible}

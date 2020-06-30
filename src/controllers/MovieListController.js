@@ -144,3 +144,4 @@ export const updateMovieList = async (data) => {
     return { rdo: 1, mensaje: error };
   }
 };
+

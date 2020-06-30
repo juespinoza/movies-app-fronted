@@ -56,6 +56,7 @@ export default class DetailsScreen extends React.Component {
 
     this.interval = setInterval(() => this.getComments(movieInfo.id), 4000);
     this.interval2 = setInterval(() => this.getAverage(movieInfo.id), 4000);
+
     //get user data from asyncstorage
     this.checkUserSignedIn();
 
@@ -63,7 +64,6 @@ export default class DetailsScreen extends React.Component {
     // AsyncStorage.getItem("@user").then((value) => {
     //   this.setState({userData: value});
     // })
-    
 
   }
 

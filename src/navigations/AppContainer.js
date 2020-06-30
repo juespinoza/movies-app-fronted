@@ -17,9 +17,12 @@ import {
   loginScreen,
   logoutScreen,
   movieListsScreen,
+  profileScreen,
+  updateUserScreen,
   createListsScreen,
   manageListsScreen,
 } from "./RouteStackStructure";
+
 
 const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get("screen");
@@ -78,12 +81,12 @@ function AppContainer() {
           console.log("ERROR GETTING USER DATA");
       }
   }
-
   this.interval = setInterval(() => this.checkUserSignedIn2(), 4000);
 
   return (
     <>
     <NavigationContainer>
+
       <Drawer.Navigator
         drawerContentOptions={{
           activeTintColor: "#4f4d37",
@@ -96,6 +99,19 @@ function AppContainer() {
           options={{ drawerLabel: "Buscar Pelis" }}
           component={homeScreen}
         />
+        
+        <Drawer.Screen
+          name="Movie Lists"
+          options={{ drawerLabel: "Listas de películas" }}
+          component={movieListsScreen}
+        />
+        {!isLoggedIn && (
+        <Drawer.Screen
+          name="LoginScreen"
+          options={{ drawerLabel: "Iniciar Sesion" }}
+          component={loginScreen}
+        />
+        )}
         <Drawer.Screen
           name="Lists"
           options={{ drawerLabel: "Ver listas de pelis" }}
@@ -124,13 +140,26 @@ function AppContainer() {
           options={{ drawerLabel: "Registrarse" }}
           component={registerScreen}
         />
+        {isLoggedIn && (
+        <Drawer.Screen
+          name="LogoutScreen"
+          options={{ drawerLabel: "Cerrar Sesion" }}
+          component={logoutScreen}
+        />
         )}
         {isLoggedIn && (
-          <Drawer.Screen
-            name="LogoutScreen"
-            options={{ drawerLabel: "Cerrar Sesion" }}
-            component={logoutScreen}
-          />
+        <Drawer.Screen
+          name="ProfileScreen"
+          options={{ drawerLabel: "Perfil" }}
+          component={profileScreen}
+        />
+        )}
+        {isLoggedIn && (
+        <Drawer.Screen
+          name="UpdateUserScreen"
+          options={{ drawerLabel: "Configuración" }}
+          component={updateUserScreen}
+        />
         )}
       </Drawer.Navigator>
     </NavigationContainer>

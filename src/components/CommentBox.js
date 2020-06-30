@@ -32,6 +32,7 @@ export default function CommentBox({userLoggedIn, userData, movieId,props}) {
       console.log(now);
       console.log(comment);
     //   this.setState({loading: true});
+
     showMessage({
         message: "Comentario realizado con exito!",
         type: "success",
@@ -48,7 +49,6 @@ export default function CommentBox({userLoggedIn, userData, movieId,props}) {
         flashMessage: "Iniciando Sesion",
       });
   };
-
   const onChangeTxt = (e) => setComment(e);
 
     return (
@@ -89,6 +89,7 @@ export default function CommentBox({userLoggedIn, userData, movieId,props}) {
             <>
             <View style={{ height: 120 }}>
                 <Text> Tenes que estar logueado para comentar </Text>
+
                 <Button
                     title="Iniciar Sesion"
                     buttonStyle={styles.btnStyle}

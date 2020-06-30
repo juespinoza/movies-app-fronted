@@ -1,17 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+
 import { Block, Card, Icon } from "galio-framework";
 import Stars from "./Stars";
 
-
 import theme from '../theme';
+
 
 export default function Comment({ body, date, email, fullName, stars}) {
 
   return (
     <View>
       <View style={styles.vistaComentarios}>
-     
         <View>
           <View style={styles.innerContainer}><Stars key={body} cant={stars}/></View>
           <Text style={styles.infoUser}>{fullName} ({email})</Text>
