@@ -72,7 +72,7 @@ export default class CreateListScreen extends React.PureComponent {
       let movies = await getMovies();
       const allMovies = [
         {
-          name: "Todas las Películas",
+          name: "Las pelis más populares",
           id: 0,
           children: movies,
         },
