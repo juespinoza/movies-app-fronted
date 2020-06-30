@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import { Button } from "react-native-elements";
 import AsyncStorage from "@react-native-community/async-storage";
 
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function LogoutScreen(props) {
 
@@ -18,13 +19,13 @@ function LogoutScreen(props) {
             let value = await AsyncStorage.getItem("@user");
             console.log("USER DATA: " + value);
             if (value != null){
-                console.log("LOGGED IN");
+                console.log("LOGGED IN LOGOUT SCREEN");
                 let data = JSON.parse(value);
                 setLoginName(data.fullName);
                 setLoginEmail(data.email);
             }
             else {
-                console.log("NOT LOGGED IN");
+                console.log("NOT LOGGED IN  LOGOUT SCREEN");
                 setLoginName("No Logueado");
                 setLoginEmail("No Logueado");
             }
@@ -35,13 +36,20 @@ function LogoutScreen(props) {
     }
 
     const logoutUser = async () => {
-        AsyncStorage.removeItem("@user");
-        console.log(loginName);
-        checkUserSignedIn();
+        await AsyncStorage.removeItem("@user");
+        // console.log(loginName);
+        // checkUserSignedIn();
+        showMessage({
+            message: "Sesion cerrada con exito!",
+            type: "info",
+          })
         props.navigation.navigate("Home", {
             flashMessage: "Sesion Cerrada con Exito!",
         });
      };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -75,7 +83,7 @@ function LogoutScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(4,80,168,1)"
+    backgroundColor: "white"
   },
   btnStyle: {
     marginTop: 10,
@@ -93,33 +101,33 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   loremIpsum: {
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 18,
     marginTop: -270,
     marginLeft: 37
   },
   nombre: {
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 17
   },
   loremIpsum3: {
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 17,
     marginLeft: 12
   },
   nombreRow: {
     height: 20,
     flexDirection: "row",
-    marginTop: 50,
+    marginTop: 55,
     marginLeft: 61,
     marginRight: 138
   },
   email: {
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 17
   },
   loremIpsum5: {
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 17,
     marginLeft: 31
   },

@@ -15,6 +15,9 @@ import { withGalio, Text, Card, Block } from "galio-framework";
 import { Dropdown } from 'react-native-material-dropdown';
 import { getEstrenos, findByTitle, findByFilter } from "../controllers/TmdbController";
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
+
 import theme from '../theme';
 
 // import Modal from 'react-native-modal';
@@ -62,12 +65,20 @@ class HomeScreen extends React.Component {
     this.setState({isLoading: true});
     let result = await findByTitle(this.state.movieName);
     this.setState({ estrenos: result, isLoading: false });
+    showMessage({
+      message: "Actualizando con los resultados de la busqueda",
+      type: "info",
+    })
   }
 
   onFilterButton = async () => {
     this.setState({isLoading: true});
     this.toggleModal();
     let result = await findByFilter(this.state.sortby,this.state.sortValue);
+    showMessage({
+      message: "Filtros aplicados con exito!",
+      type: "success",
+    })
     this.setState({ estrenos: result, isLoading: false });
   }
 
@@ -158,6 +169,8 @@ class HomeScreen extends React.Component {
 
   render() {
     let { sortby, name } = this.state;
+    // const flashMessage = navigation.state.params.flashMessage;
+
     return (
       <>
       <View style={styles.modal}>

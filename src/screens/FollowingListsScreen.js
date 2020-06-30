@@ -76,7 +76,7 @@ export default class FollowingListsScreen extends React.PureComponent {
             <Block row>
               <Block row middle style={{ marginHorizontal: theme.SIZES.BASE }}>
                 <Icon
-                  name={item.public ? "eye" : "eye-close"}
+                  name={item.public ? "eye" : "eye-slash"}
                   family="font-awesome"
                   color={theme.COLORS.MUTED}
                   size={theme.SIZES.FONT * 0.875}
@@ -121,7 +121,7 @@ export default class FollowingListsScreen extends React.PureComponent {
         {currentUser !== null && (
           <Block flex={3}>
             <Block center style={{ paddingTop: 20 }}>
-              <Text muted>Listas de películas las que tienes acceso</Text>
+              <Text muted>Listas de películas a las que tienes acceso</Text>
             </Block>
             {isLoading && (
               <Text flex center>
@@ -139,7 +139,7 @@ export default class FollowingListsScreen extends React.PureComponent {
                 )}
                 {movieLists.length === 0 && (
                   <Text flex center style={{ marginTop: 20 }}>
-                    No tienes acceso a ninguna lista.
+                    No tienes acceso a ninguna lista privada.
                   </Text>
                 )}
               </Block>
