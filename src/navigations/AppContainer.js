@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 import FlashMessage from "react-native-flash-message";
 
-import theme from '../theme';
+import theme from "../theme";
 import {
   homeScreen,
   registerScreen,
@@ -22,7 +22,6 @@ import {
   createListsScreen,
   manageListsScreen,
 } from "./RouteStackStructure";
-
 
 const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get("screen");
@@ -53,117 +52,106 @@ function AppContainer() {
     </SafeAreaView>
   );
 
-
   const [isLoggedIn, setIsLoggedIn] = useState();
 
   useEffect(() => {
     checkUserSignedIn2();
   }, []);
 
-
-
-  checkUserSignedIn2 = async () =>{
-      try {
-          let value = await AsyncStorage.getItem("@user");
-          console.log("USER DATA IN MENU: " + value);
-          if (value != null){
-              console.log("LOGGED IN");
-              console.log(isLoggedIn);
-              setIsLoggedIn(true);
-          }
-          else {
-              console.log("NOT LOGGED IN IN MENU");
-              setIsLoggedIn(false);
-              console.log(isLoggedIn);
-          }
-      } catch (error) {
-          console.log(error);
-          console.log("ERROR GETTING USER DATA");
+  checkUserSignedIn2 = async () => {
+    try {
+      let value = await AsyncStorage.getItem("@user");
+      console.log("USER DATA IN MENU: " + value);
+      if (value != null) {
+        console.log("LOGGED IN");
+        console.log(isLoggedIn);
+        setIsLoggedIn(true);
+      } else {
+        console.log("NOT LOGGED IN IN MENU");
+        setIsLoggedIn(false);
+        console.log(isLoggedIn);
       }
-  }
+    } catch (error) {
+      console.log(error);
+      console.log("ERROR GETTING USER DATA");
+    }
+  };
   this.interval = setInterval(() => this.checkUserSignedIn2(), 4000);
 
   return (
     <>
-    <NavigationContainer>
-
-      <Drawer.Navigator
-        drawerContentOptions={{
-          activeTintColor: "#4f4d37",
-          itemStyle: { marginVertical: 5 },
-          labelStyle: { width: width * 0.4 },
-        }}
-      >
-        <Drawer.Screen
-          name="HomeScreen"
-          options={{ drawerLabel: "Buscar Pelis" }}
-          component={homeScreen}
-        />
-        
-        <Drawer.Screen
-          name="Movie Lists"
-          options={{ drawerLabel: "Listas de películas" }}
-          component={movieListsScreen}
-        />
-        {!isLoggedIn && (
-        <Drawer.Screen
-          name="LoginScreen"
-          options={{ drawerLabel: "Iniciar Sesion" }}
-          component={loginScreen}
-        />
-        )}
-        <Drawer.Screen
-          name="Lists"
-          options={{ drawerLabel: "Ver listas de pelis" }}
-          component={movieListsScreen}
-        />
-        <Drawer.Screen
-          name="Createlists"
-          options={{ drawerLabel: "Crear Lista de pelis" }}
-          component={createListsScreen}
-        />
-        <Drawer.Screen
-          name="Managelists"
-          options={{ drawerLabel: "Adminitrar Lista de pelis" }}
-          component={manageListsScreen}
-        />
-        {!isLoggedIn && (
+      <NavigationContainer>
+        <Drawer.Navigator
+          drawerContentOptions={{
+            activeTintColor: "#4f4d37",
+            itemStyle: { marginVertical: 5 },
+            labelStyle: { width: width * 0.4 },
+          }}
+        >
           <Drawer.Screen
-            name="LoginScreen"
-            options={{ drawerLabel: "Iniciar Sesion" }}
-            component={loginScreen}
+            name="HomeScreen"
+            options={{ drawerLabel: "Buscar Pelis" }}
+            component={homeScreen}
           />
-        )}
-        {!isLoggedIn && (
-        <Drawer.Screen
-          name="RegisterScreen"
-          options={{ drawerLabel: "Registrarse" }}
-          component={registerScreen}
-        />
-        {isLoggedIn && (
-        <Drawer.Screen
-          name="LogoutScreen"
-          options={{ drawerLabel: "Cerrar Sesion" }}
-          component={logoutScreen}
-        />
-        )}
-        {isLoggedIn && (
-        <Drawer.Screen
-          name="ProfileScreen"
-          options={{ drawerLabel: "Perfil" }}
-          component={profileScreen}
-        />
-        )}
-        {isLoggedIn && (
-        <Drawer.Screen
-          name="UpdateUserScreen"
-          options={{ drawerLabel: "Configuración" }}
-          component={updateUserScreen}
-        />
-        )}
-      </Drawer.Navigator>
-    </NavigationContainer>
-    <FlashMessage position="bottom" />
+
+          <Drawer.Screen
+            name="Movie Lists"
+            options={{ drawerLabel: "Listas de películas" }}
+            component={movieListsScreen}
+          />
+          {!isLoggedIn && (
+            <Drawer.Screen
+              name="LoginScreen"
+              options={{ drawerLabel: "Iniciar Sesion" }}
+              component={loginScreen}
+            />
+          )}
+          <Drawer.Screen
+            name="Lists"
+            options={{ drawerLabel: "Ver listas de pelis" }}
+            component={movieListsScreen}
+          />
+          <Drawer.Screen
+            name="Createlists"
+            options={{ drawerLabel: "Crear Lista de pelis" }}
+            component={createListsScreen}
+          />
+          <Drawer.Screen
+            name="Managelists"
+            options={{ drawerLabel: "Adminitrar Lista de pelis" }}
+            component={manageListsScreen}
+          />
+          {!isLoggedIn && (
+            <Drawer.Screen
+              name="RegisterScreen"
+              options={{ drawerLabel: "Registrarse" }}
+              component={registerScreen}
+            />
+          )}
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="LogoutScreen"
+              options={{ drawerLabel: "Cerrar Sesion" }}
+              component={logoutScreen}
+            />
+          )}
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="ProfileScreen"
+              options={{ drawerLabel: "Perfil" }}
+              component={profileScreen}
+            />
+          )}
+          {isLoggedIn && (
+            <Drawer.Screen
+              name="UpdateUserScreen"
+              options={{ drawerLabel: "Configuración" }}
+              component={updateUserScreen}
+            />
+          )}
+        </Drawer.Navigator>
+      </NavigationContainer>
+      <FlashMessage position="bottom" />
     </>
   );
 }
