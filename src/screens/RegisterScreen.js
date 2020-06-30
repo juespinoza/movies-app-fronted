@@ -39,6 +39,7 @@ class RegisterScreen extends React.Component {
   };
 
   handleRegistration = () => {
+    console.log("registrando");
     const data = {
       fullName: this.state.user,
       email: this.state.email,
@@ -138,10 +139,7 @@ class RegisterScreen extends React.Component {
               </View>
             </Block>
             <Block flex middle>
-              <Button
-                color="error"
-                onPress={() => this.handleRegistration.bind(this)}
-              >
+              <Button color="error" onPress={() => this.handleRegistration()}>
                 Registrarse
               </Button>
               <Button
