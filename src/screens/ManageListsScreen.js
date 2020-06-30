@@ -102,7 +102,7 @@ export default class ManageListsScreen extends React.PureComponent {
           marginLeft: 20,
         }}
       >
-        <View style={{ width: width * 0.8, marginTop: 10 }}>
+        <View style={{ width: width * 0.85, marginTop: 10 }}>
           <TouchableOpacity style={{ marginTop: 10 }}>
             <Card
               flex
