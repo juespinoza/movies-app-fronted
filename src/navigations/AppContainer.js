@@ -96,21 +96,27 @@ function AppContainer() {
           options={{ drawerLabel: "Buscar Pelis" }}
           component={homeScreen}
         />
+        {isLoggedIn && (
         <Drawer.Screen
           name="Lists"
           options={{ drawerLabel: "Ver listas de pelis" }}
           component={movieListsScreen}
         />
+        )}
+        {isLoggedIn && (
         <Drawer.Screen
           name="Createlists"
           options={{ drawerLabel: "Crear Lista de pelis" }}
           component={createListsScreen}
         />
+        )}
+        {isLoggedIn && (
         <Drawer.Screen
           name="Managelists"
-          options={{ drawerLabel: "Adminitrar Lista de pelis" }}
+          options={{ drawerLabel: "Administrar Listas" }}
           component={manageListsScreen}
         />
+        )}
         {!isLoggedIn && (
           <Drawer.Screen
             name="LoginScreen"

@@ -105,7 +105,7 @@ export default function MovieDetailedInfo({ item , stars}) {
       </View>
 
 
-      <Block center>
+      {/* <Block center>
               <Card
                 borderless
                 style={styles.stats}
@@ -139,7 +139,7 @@ export default function MovieDetailedInfo({ item , stars}) {
                   </Block>
                 )}
               />
-            </Block>
+            </Block> */}
 
 
     </View>
