@@ -270,7 +270,7 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(4,80,168,1)",
+    backgroundColor: "#fff",
   },
 
   image: {
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginLeft: 87,
   },
   loremIpsum5: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 17,
     marginLeft: 12,
   },
@@ -298,17 +298,17 @@ const styles = StyleSheet.create({
     height: 60,
   },
   nombre: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 17,
   },
   loremIpsum: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 18,
     marginTop: -270,
     marginLeft: 37,
   },
   loremIpsum3: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 17,
     marginLeft: 12,
   },
@@ -320,11 +320,11 @@ const styles = StyleSheet.create({
     marginRight: 138,
   },
   email: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 17,
   },
   generosFavoritos: {
-    color: "rgba(255,255,255,1)",
+    color: "#000",
     fontSize: 17,
     marginLeft: 12,
   },

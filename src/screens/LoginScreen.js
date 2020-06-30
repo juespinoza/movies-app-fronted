@@ -37,6 +37,7 @@ class LoginScreen extends React.Component {
   };
 
   setLogin = async (loginData) => {
+    console.log("login", loginData);
     let response = await login(loginData);
 
     if (response.rdo == 0) {
@@ -46,8 +47,8 @@ class LoginScreen extends React.Component {
       showMessage({
         message: "Iniciaste sesion exitosamente!",
         type: "success",
-      })
-      this.props.navigation.navigate("Home", {
+      });
+      this.props.navigation.navigate("HomeScreen", {
         flashMessage: response.message,
       });
     } else {
@@ -109,7 +110,7 @@ class LoginScreen extends React.Component {
               </Text>
             </Block>
             <Block flex middle>
-              <Button color="error" onPress={this.handleLogin.bind(this)}>
+              <Button color="error" onPress={() => this.handleLogin()}>
                 Inicia Sesion
               </Button>
               <Button

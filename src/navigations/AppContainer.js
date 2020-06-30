@@ -78,6 +78,7 @@ function AppContainer() {
   };
   this.interval = setInterval(() => this.checkUserSignedIn2(), 4000);
 
+  console.disableYellowBox = true;
   return (
     <>
       <NavigationContainer>
@@ -115,7 +116,7 @@ function AppContainer() {
           {isLoggedIn && (
             <Drawer.Screen
               name="Managelists"
-              options={{ drawerLabel: "Adminitrar Lista de pelis" }}
+              options={{ drawerLabel: "Administrar Lista de pelis" }}
               component={manageListsScreen}
             />
           )}

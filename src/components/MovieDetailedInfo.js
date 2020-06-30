@@ -4,9 +4,9 @@ import { Block, Card, Icon } from "galio-framework";
 
 import Stars from "./Stars";
 
-import theme from '../theme';
+import theme from "../theme";
 
-export default function MovieDetailedInfo({ item , stars}) {
+export default function MovieDetailedInfo({ item, stars }) {
   const language = (lang) => {
     let result = "";
     switch (lang) {
@@ -25,7 +25,6 @@ export default function MovieDetailedInfo({ item , stars}) {
 
   const starCant = (cant) => {
     // var res = [];
-
     // for (let i = 1; i < cant; i++) {
     //   res.push(
     //     <Icon
@@ -61,42 +60,77 @@ export default function MovieDetailedInfo({ item , stars}) {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
-        <Icon name="language" family="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="language"
+          family="font-awesome"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Idioma Original: </Text>
         <Text style={styles.resultado}>{language(item.original_language)}</Text>
       </View>
 
       <View style={styles.innerContainer}>
-        <Icon name="star" family="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="star"
+          family="font-awesome"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Puntaje TMDB:</Text>
         <Text style={styles.resultado}>{item.vote_average}</Text>
       </View>
       <View style={styles.innerContainer}>
-        <Icon name="vote" family="material-community" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="vote"
+          family="material-community"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Votos:</Text>
         <Text style={styles.resultado}>{item.vote_count}</Text>
       </View>
 
       <View style={styles.innerContainer}>
-        <Icon name="calendar" family="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="calendar"
+          family="font-awesome"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Fecha de Lanzamiento:</Text>
         <Text style={styles.resultado}>{item.release_date}</Text>
       </View>
 
       <View style={styles.innerContainer}>
-        <Icon name="http" family="material-icons" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="http"
+          family="material-icons"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Pagina Web:</Text>
         <Text style={styles.resultado}>{item.homepage}</Text>
       </View>
 
       <View style={styles.innerContainer}>
-        <Icon name="trophy" family="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5 }/>
+        <Icon
+          name="trophy"
+          family="font-awesome"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Calif. MovieAPP:</Text>
-        <Stars key={Math.random()} cant={stars}/>
+        <Stars key={Math.random()} cant={stars} />
       </View>
 
       <View style={styles.innerContainer2}>
-        <Icon name="book" family="font-awesome" color={theme.COLORS.MUTED} size={theme.SIZES.FONT * 1.5} />
+        <Icon
+          name="book"
+          family="font-awesome"
+          color={theme.COLORS.MUTED}
+          size={theme.SIZES.FONT * 1.5}
+        />
         <Text style={styles.titulos}>Descripción</Text>
       </View>
 
@@ -104,8 +138,7 @@ export default function MovieDetailedInfo({ item , stars}) {
         <Text style={styles.resultado}>{item.overview}</Text>
       </View>
 
-
-      <Block center>
+      {/* <Block center>
               <Card
                 borderless
                 style={styles.stats}
@@ -139,9 +172,7 @@ export default function MovieDetailedInfo({ item , stars}) {
                   </Block>
                 )}
               />
-            </Block>
-
-
+            </Block> */}
     </View>
   );
 }
@@ -159,12 +190,12 @@ const styles = StyleSheet.create({
   innerContainer2: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop:20
+    marginTop: 20,
   },
   titulos: {
     fontSize: 18,
     fontWeight: "bold",
-    marginLeft: 5
+    marginLeft: 5,
   },
   resultado: {
     fontSize: 18,

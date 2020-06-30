@@ -39,6 +39,7 @@ class RegisterScreen extends React.Component {
   };
 
   handleRegistration = () => {
+    console.log("registrando");
     const data = {
       fullName: this.state.user,
       email: this.state.email,
@@ -138,11 +139,8 @@ class RegisterScreen extends React.Component {
               </View>
             </Block>
             <Block flex middle>
-              <Button
-                color="error"
-                onPress={() => this.handleRegistration.bind(this)}
-              >
-                Sign up
+              <Button color="error" onPress={() => this.handleRegistration()}>
+                Registrarse
               </Button>
               <Button
                 color="transparent"
@@ -154,7 +152,7 @@ class RegisterScreen extends React.Component {
                   color={theme.COLORS.ERROR}
                   size={theme.SIZES.FONT * 0.75}
                 >
-                  ¿Ya tienes una cuenta? Sign In
+                  ¿Ya tienes una cuenta? Inicia sesión
                 </Text>
               </Button>
             </Block>
