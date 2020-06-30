@@ -79,7 +79,7 @@ function AppContainer() {
   }
 
   this.interval = setInterval(() => this.checkUserSignedIn2(), 4000);
-
+  console.disableYellowBox = true; 
   return (
     <>
     <NavigationContainer>
