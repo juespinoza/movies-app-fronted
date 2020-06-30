@@ -111,7 +111,7 @@ export default class ManageListsScreen extends React.PureComponent {
               shadowColor={theme.COLORS.BLACK}
               style={styles.author}
               title={item.name}
-              caption={`${item.owner.slice(0, 16)}...`}
+              caption={item.owner}
               avatar="http://lorempixel.com/80/80/abstract/" //"https://picsum.photos/80"
               location={
                 <Block row>
