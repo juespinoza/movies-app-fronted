@@ -1,0 +1,27 @@
+export const GENRES = [
+  {
+    id: 0,
+    name: "Todos los géneros",
+    generos: [
+      { name: "action", id: 28 },
+      { name: "animated", id: 16 },
+      { name: "documentary", id: 99 },
+      { name: "drama", id: 18 },
+      { name: "family", id: 10751 },
+      { name: "fantasy", id: 14 },
+      { name: "history", id: 36 },
+      { name: "comedy", id: 35 },
+      { name: "war", id: 10752 },
+      { name: "crime", id: 80 },
+      { name: "music", id: 10402 },
+      { name: "mystery", id: 9648 },
+      { name: "romance", id: 10749 },
+      { name: "sci fi", id: 878 },
+      { name: "horror", id: 27 },
+      { name: "TV movie", id: 10770 },
+      { name: "thriller", id: 53 },
+      { name: "western", id: 37 },
+      { name: "adventure", id: 12 },
+    ],
+  },
+];

@@ -6,9 +6,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  View,
 } from "react-native";
 import { theme, Block, Button, Input, Text, NavBar } from "galio-framework";
 import { registration } from "../controllers/UserController";
+import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import { GENRES } from "./shared/genres";
+
+const items = GENRES;
 
 const { height, width } = Dimensions.get("window");
 
@@ -20,6 +25,7 @@ class RegisterScreen extends React.Component {
       email: "",
       password: "",
       genreIds: [],
+      selectedItems: [],
     };
   }
 
@@ -27,12 +33,16 @@ class RegisterScreen extends React.Component {
     this.setState({ [name]: value });
   };
 
+  onSelectedItemsChange = (selectedItems) => {
+    this.setState({ selectedItems });
+  };
+
   handleRegistration = () => {
     const data = {
       fullName: this.state.user,
       email: this.state.email,
       password: this.state.password,
-      genreIds: this.state.genreIds,
+      genreIds: this.state.selectedItems,
     };
     // TODO: validate user data
     this.setRegistration(data);
@@ -94,7 +104,21 @@ class RegisterScreen extends React.Component {
                 style={{ width: width * 0.9 }}
                 onChangeText={(text) => this.handleChange("password", text)}
               />
-              {/* TODO: implement genre list */}
+              <View style={{ backgroundColor: "white" }}>
+                <SectionedMultiSelect
+                  items={items}
+                  uniqueKey="id"
+                  subKey="generos"
+                  selectText="Géneros"
+                  searchPlaceholderText="Buscar"
+                  selectedText="seleccionados"
+                  showDropDowns={false}
+                  expandDropDowns={true}
+                  readOnlyHeadings={true}
+                  onSelectedItemsChange={this.onSelectedItemsChange}
+                  selectedItems={this.state.selectedItems}
+                />
+              </View>
             </Block>
             <Block flex middle>
               <Button
@@ -106,7 +130,7 @@ class RegisterScreen extends React.Component {
               <Button
                 color="transparent"
                 shadowless
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => navigation.navigate("LoginScreen")}
               >
                 <Text
                   center
